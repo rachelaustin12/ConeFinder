@@ -14,10 +14,10 @@ export default function Home() {
         className="text-center max-w-lg w-full"
       >
         <div className="text-6xl mb-4">🍦</div>
-        <h1 className="font-pacifico text-4xl sm:text-5xl text-foreground mb-3">
+        <h1 className="font-nunito font-bold text-4xl sm:text-5xl text-foreground mb-3">
           Where's the Ice Cream Van?
         </h1>
-        <p className="text-muted-foreground font-inter mb-12 text-lg">
+        <p className="text-muted-foreground font-nunito mb-12 text-lg">
           Are you a driver or an ice cream hunter?
         </p>
 
@@ -31,8 +31,8 @@ export default function Home() {
           >
             <span className="text-5xl">🔍</span>
             <div>
-              <h2 className="font-pacifico text-2xl text-foreground mb-1">Hunter</h2>
-              <p className="text-muted-foreground text-sm font-inter">
+              <h2 className="font-nunito font-bold text-2xl text-foreground mb-1">Hunter</h2>
+              <p className="text-muted-foreground text-sm font-nunito">
                 Find ice cream vans near you
               </p>
             </div>
@@ -47,8 +47,8 @@ export default function Home() {
           >
             <span className="text-5xl">🚐</span>
             <div>
-              <h2 className="font-pacifico text-2xl text-foreground mb-1">Driver</h2>
-              <p className="text-muted-foreground text-sm font-inter">
+              <h2 className="font-nunito font-bold text-2xl text-foreground mb-1">Driver</h2>
+              <p className="text-muted-foreground text-sm font-nunito">
                 Share your live location with fans
               </p>
             </div>
