@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { Loader2, IceCream, Pencil, Camera } from 'lucide-react';
+import { Loader2, IceCream, Pencil, Camera, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Header from '../components/Header';
 import VanSetupForm from '../components/VanSetupForm';
@@ -14,12 +14,18 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+  AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 export default function Driver() {
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState({});
+  const [deletingAccount, setDeletingAccount] = useState(false);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -43,6 +49,14 @@ export default function Driver() {
 
   const handleVanUpdate = (updatedVan) => {
     queryClient.setQueryData(['my-van', user.email], [updatedVan]);
+  };
+
+  const handleDeleteAccount = async () => {
+    setDeletingAccount(true);
+    if (myVan) {
+      await base44.entities.IceCreamVan.delete(myVan.id);
+    }
+    await base44.auth.logout('/');
   };
 
   const handleEditSave = async () => {
@@ -182,6 +196,36 @@ export default function Driver() {
                 )}
               </CardContent>
             </Card>
+
+            {/* Delete Account */}
+            <div className="pt-2 border-t border-border/50">
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive hover:bg-destructive/10 rounded-xl gap-1.5 w-full">
+                    <Trash2 className="w-4 h-4" />
+                    Delete Account
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="rounded-2xl">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete your account?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This will remove your van profile and sign you out. This action cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className="rounded-xl">Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleDeleteAccount}
+                      disabled={deletingAccount}
+                      className="bg-destructive hover:bg-destructive/90 rounded-xl"
+                    >
+                      {deletingAccount ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Yes, delete'}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
 
             {/* Mini Map Preview */}
             {myVan.is_active && myVan.latitude && myVan.longitude && (

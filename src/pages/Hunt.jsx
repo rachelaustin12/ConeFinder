@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { IceCream, Loader2, Home, Plus, Star } from 'lucide-react';
@@ -15,6 +15,38 @@ export default function Hunt() {
   const [showModal, setShowModal] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const queryClient = useQueryClient();
+  const [refreshing, setRefreshing] = useState(false);
+  const [pullStart, setPullStart] = useState(null);
+  const [pullDelta, setPullDelta] = useState(0);
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await queryClient.invalidateQueries({ queryKey: ['active-vans'] });
+    await queryClient.invalidateQueries({ queryKey: ['van-sightings'] });
+    setTimeout(() => setRefreshing(false), 600);
+  }, [queryClient]);
+
+  useEffect(() => {
+    const onTouchStart = (e) => setPullStart(e.touches[0].clientY);
+    const onTouchMove = (e) => {
+      if (pullStart === null || window.scrollY > 0) return;
+      const delta = e.touches[0].clientY - pullStart;
+      if (delta > 0) setPullDelta(Math.min(delta, 80));
+    };
+    const onTouchEnd = () => {
+      if (pullDelta > 60) handleRefresh();
+      setPullStart(null);
+      setPullDelta(0);
+    };
+    document.addEventListener('touchstart', onTouchStart);
+    document.addEventListener('touchmove', onTouchMove);
+    document.addEventListener('touchend', onTouchEnd);
+    return () => {
+      document.removeEventListener('touchstart', onTouchStart);
+      document.removeEventListener('touchmove', onTouchMove);
+      document.removeEventListener('touchend', onTouchEnd);
+    };
+  }, [pullStart, pullDelta, handleRefresh]);
 
   const playJingle = () => {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -113,7 +145,16 @@ export default function Hunt() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-6">
+      {/* Pull-to-refresh indicator */}
+      {(pullDelta > 10 || refreshing) && (
+        <div className="fixed top-14 left-0 right-0 z-40 flex justify-center pointer-events-none">
+          <div className={`mt-2 px-4 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-semibold shadow transition-all ${refreshing ? 'opacity-100' : 'opacity-70'}`}>
+            {refreshing ? '↻ Refreshing...' : pullDelta > 60 ? '↑ Release to refresh' : '↓ Pull to refresh'}
+          </div>
+        </div>
+      )}
+
+      <main className="max-w-5xl mx-auto px-4 py-6 pb-20">
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
