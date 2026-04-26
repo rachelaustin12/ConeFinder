@@ -200,11 +200,26 @@ export default function Driver() {
 
             {/* Messages */}
             <div>
-              <h3 className="font-heading font-semibold text-sm mb-3 flex items-center gap-2">
-                <MessageCircle className="w-4 h-4 text-primary" />
-                Customer Messages
-              </h3>
-              <DriverMessages van={myVan} />
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-heading font-semibold text-sm flex items-center gap-2">
+                  <MessageCircle className="w-4 h-4 text-primary" />
+                  Customer Messages
+                </h3>
+                <button
+                  onClick={async () => {
+                    const updated = await base44.entities.IceCreamVan.update(myVan.id, { messages_enabled: !myVan.messages_enabled });
+                    handleVanUpdate({ ...myVan, messages_enabled: !myVan.messages_enabled });
+                    toast.success(myVan.messages_enabled ? 'Visit requests turned off' : 'Visit requests turned on');
+                  }}
+                  className={`relative w-10 h-5 rounded-full transition-colors ${myVan.messages_enabled !== false ? 'bg-primary' : 'bg-muted-foreground/30'}`}
+                >
+                  <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${myVan.messages_enabled !== false ? 'translate-x-5' : 'translate-x-0'}`} />
+                </button>
+              </div>
+              {myVan.messages_enabled !== false && <DriverMessages van={myVan} />}
+              {myVan.messages_enabled === false && (
+                <p className="text-xs text-muted-foreground text-center py-3">Visit requests are currently off.</p>
+              )}
             </div>
 
             {/* Delete Account */}

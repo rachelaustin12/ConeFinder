@@ -35,6 +35,11 @@
       "default": false,
       "description": "Whether the van is currently sharing location"
     },
+    "messages_enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether hunters can send visit request messages to this van"
+    },
     "last_location_update": {
       "type": "string",
       "format": "date-time",

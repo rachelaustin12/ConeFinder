@@ -73,7 +73,7 @@ export default function VanCard({ van, userPosition }) {
                     </span>
                   )}
                 </div>
-                {!van.isSighting && (
+                {!van.isSighting && van.messages_enabled !== false && (
                   <button
                     onClick={() => setShowMessage(true)}
                     className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 font-semibold transition-colors"

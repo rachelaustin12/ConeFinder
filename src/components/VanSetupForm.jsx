@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { base44 } from '@/api/base44Client';
-import { Truck, Loader2 } from 'lucide-react';
+import { Truck, Loader2, MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 
@@ -12,6 +12,7 @@ export default function VanSetupForm({ user, onCreated }) {
   const [name, setName] = useState('');
   const [driverName, setDriverName] = useState(user?.full_name || '');
   const [specialties, setSpecialties] = useState('');
+  const [messagesEnabled, setMessagesEnabled] = useState(true);
   const [saving, setSaving] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -27,6 +28,7 @@ export default function VanSetupForm({ user, onCreated }) {
       driver_email: user.email,
       specialties: specialties.trim(),
       is_active: false,
+      messages_enabled: messagesEnabled,
     });
     setSaving(false);
     toast.success("Van created! You can now start sharing your location.");
@@ -75,6 +77,22 @@ export default function VanSetupForm({ user, onCreated }) {
             className="rounded-xl resize-none h-20"
           />
           <p className="text-xs text-muted-foreground">Separate with commas</p>
+        </div>
+        <div className="flex items-center justify-between p-3 rounded-xl border border-border bg-muted/30">
+          <div className="flex items-center gap-2">
+            <MessageCircle className="w-4 h-4 text-primary" />
+            <div>
+              <p className="text-sm font-semibold">Allow visit requests</p>
+              <p className="text-xs text-muted-foreground">Hunters can send you messages</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setMessagesEnabled(v => !v)}
+            className={`relative w-11 h-6 rounded-full transition-colors ${messagesEnabled ? 'bg-primary' : 'bg-muted-foreground/30'}`}
+          >
+            <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${messagesEnabled ? 'translate-x-5' : 'translate-x-0'}`} />
+          </button>
         </div>
         <Button type="submit" className="w-full rounded-xl font-body" disabled={saving}>
           {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
