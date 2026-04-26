@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { IceCream, Clock, Navigation, Eye } from 'lucide-react';
+import { IceCream, Clock, Navigation, Eye, MessageCircle } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { motion } from 'framer-motion';
+import MessageVanModal from './MessageVanModal';
 
 function getDistance(lat1, lon1, lat2, lon2) {
   const R = 6371;
@@ -14,6 +15,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
 }
 
 export default function VanCard({ van, userPosition }) {
+  const [showMessage, setShowMessage] = useState(false);
   const lastUpdate = van.last_location_update
     ? formatDistanceToNow(new Date(van.last_location_update), { addSuffix: true })
     : null;
@@ -56,24 +58,36 @@ export default function VanCard({ van, userPosition }) {
                   ))}
                 </div>
               )}
-              <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
-                {distance !== null && (
-                  <span className="flex items-center gap-1">
-                    <Navigation className="w-3 h-3" />
-                    {distance < 1 ? `${(distance * 1000).toFixed(0)}m` : `${distance.toFixed(1)}km`}
-                  </span>
-                )}
-                {lastUpdate && (
-                  <span className="flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    {lastUpdate}
-                  </span>
+              <div className="flex items-center justify-between mt-2">
+                <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                  {distance !== null && (
+                    <span className="flex items-center gap-1">
+                      <Navigation className="w-3 h-3" />
+                      {distance < 1 ? `${(distance * 1000).toFixed(0)}m` : `${distance.toFixed(1)}km`}
+                    </span>
+                  )}
+                  {lastUpdate && (
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      {lastUpdate}
+                    </span>
+                  )}
+                </div>
+                {!van.isSighting && (
+                  <button
+                    onClick={() => setShowMessage(true)}
+                    className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 font-semibold transition-colors"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    Message
+                  </button>
                 )}
               </div>
             </div>
           </div>
         </CardContent>
       </Card>
+      <MessageVanModal open={showMessage} onClose={() => setShowMessage(false)} van={van} />
     </motion.div>
   );
 }

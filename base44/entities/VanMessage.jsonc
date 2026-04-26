@@ -1,0 +1,41 @@
+{
+  "name": "VanMessage",
+  "type": "object",
+  "properties": {
+    "van_id": {
+      "type": "string",
+      "description": "ID of the IceCreamVan being messaged"
+    },
+    "van_name": {
+      "type": "string",
+      "description": "Name of the van for display"
+    },
+    "driver_email": {
+      "type": "string",
+      "description": "Email of the driver (to filter messages for driver)"
+    },
+    "sender_name": {
+      "type": "string",
+      "description": "Name of the person sending the message"
+    },
+    "message": {
+      "type": "string",
+      "description": "The message text"
+    },
+    "location_hint": {
+      "type": "string",
+      "description": "Where the sender is, e.g. 'near the park'"
+    },
+    "is_read": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the driver has read this message"
+    }
+  },
+  "required": [
+    "van_id",
+    "van_name",
+    "driver_email",
+    "message"
+  ]
+}

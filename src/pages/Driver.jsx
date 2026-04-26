@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { Loader2, IceCream, Pencil, Camera, Trash2 } from 'lucide-react';
+import { Loader2, IceCream, Pencil, Camera, Trash2, MessageCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Header from '../components/Header';
 import VanSetupForm from '../components/VanSetupForm';
+import DriverMessages from '../components/DriverMessages';
 import DriverLocationToggle from '../components/DriverLocationToggle';
 import VanMap from '../components/VanMap';
 import { Card, CardContent } from '@/components/ui/card';
@@ -196,6 +197,15 @@ export default function Driver() {
                 )}
               </CardContent>
             </Card>
+
+            {/* Messages */}
+            <div>
+              <h3 className="font-heading font-semibold text-sm mb-3 flex items-center gap-2">
+                <MessageCircle className="w-4 h-4 text-primary" />
+                Customer Messages
+              </h3>
+              <DriverMessages van={myVan} />
+            </div>
 
             {/* Delete Account */}
             <div className="pt-2 border-t border-border/50">
