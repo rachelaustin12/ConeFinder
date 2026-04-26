@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { IceCream, Loader2, ArrowLeft, Plus, Star } from 'lucide-react';
+import { IceCream, Loader2, Home, Plus, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -89,7 +89,7 @@ export default function Hunt() {
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center gap-3">
           <Link to="/" className="p-1.5 rounded-xl hover:bg-muted transition-colors">
-            <ArrowLeft className="w-5 h-5 text-muted-foreground" />
+            <Home className="w-5 h-5 text-muted-foreground" />
           </Link>
           <span className="text-xl">🔍</span>
           <h1 className="font-pacifico text-xl text-foreground flex-1">Hunt for Ice Cream</h1>
