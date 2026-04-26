@@ -1,0 +1,48 @@
+{
+  "name": "IceCreamVan",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the ice cream van"
+    },
+    "driver_name": {
+      "type": "string",
+      "description": "Name of the driver"
+    },
+    "driver_email": {
+      "type": "string",
+      "description": "Email of the driver (matches created_by)"
+    },
+    "specialties": {
+      "type": "string",
+      "description": "What the van offers, e.g. soft serve, gelato, popsicles"
+    },
+    "latitude": {
+      "type": "number",
+      "description": "Current latitude"
+    },
+    "longitude": {
+      "type": "number",
+      "description": "Current longitude"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the van is currently sharing location"
+    },
+    "last_location_update": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the location was last updated"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Photo of the van"
+    }
+  },
+  "required": [
+    "name",
+    "driver_email"
+  ]
+}
