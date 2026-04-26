@@ -1,10 +1,32 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Search, Truck } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useEffect, useRef } from 'react';
+
+// Preserve scroll positions per tab
+const scrollPositions = {};
 
 export default function BottomNav() {
   const location = useLocation();
   const isMobile = useIsMobile();
+  const prevPath = useRef(location.pathname);
+
+  useEffect(() => {
+    const current = prevPath.current;
+    const next = location.pathname;
+
+    // Save scroll for the tab we're leaving
+    scrollPositions[current] = window.scrollY;
+
+    // Restore scroll for the tab we're entering
+    if (scrollPositions[next] !== undefined) {
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrollPositions[next]);
+      });
+    }
+
+    prevPath.current = next;
+  }, [location.pathname]);
 
   if (!isMobile || location.pathname === '/') return null;
 

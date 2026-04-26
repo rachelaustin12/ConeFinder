@@ -1,13 +1,56 @@
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
-import { Star, Loader2, Camera } from 'lucide-react';
+import { Star, Loader2, Camera, ChevronDown } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
+
+function VanPickerDrawer({ vans, selectedVanId, onSelect }) {
+  const [open, setOpen] = useState(false);
+  const selected = vans.find(v => v.id === selectedVanId);
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="w-full flex items-center justify-between px-3 py-2 border border-input rounded-xl bg-background text-sm text-left hover:bg-muted/40 transition-colors"
+      >
+        <span className={selected ? 'text-foreground' : 'text-muted-foreground'}>
+          {selected ? selected.name : 'Select a van...'}
+        </span>
+        <ChevronDown className="w-4 h-4 text-muted-foreground" />
+      </button>
+      <Drawer open={open} onOpenChange={setOpen}>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>Which van would you like to review?</DrawerTitle>
+          </DrawerHeader>
+          <div className="px-4 pb-8 space-y-2">
+            {vans.map(v => (
+              <button
+                key={v.id}
+                onClick={() => { onSelect(v.id); setOpen(false); }}
+                className={`w-full text-left px-4 py-3 rounded-xl font-semibold text-sm transition-colors ${
+                  selectedVanId === v.id
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-muted hover:bg-muted/80'
+                }`}
+              >
+                {v.name}
+              </button>
+            ))}
+          </div>
+        </DrawerContent>
+      </Drawer>
+    </>
+  );
+}
 
 export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
   const [selectedVanId, setSelectedVanId] = useState('');
@@ -16,11 +59,13 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
   const [reviewerName, setReviewerName] = useState('');
   const [photoFile, setPhotoFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const isMobile = useIsMobile();
 
   const handleSubmit = async () => {
     if (!selectedVanId) { toast.error('Please select a van'); return; }
     if (!rating) { toast.error('Please give a rating'); return; }
 
+    // Optimistic: show loading immediately
     setLoading(true);
     const van = vans.find(v => v.id === selectedVanId);
 
@@ -59,19 +104,25 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
         <div className="space-y-4 pt-1">
           <div className="space-y-1.5">
             <Label className="text-sm font-bold">Which van?</Label>
-            <Select value={selectedVanId} onValueChange={setSelectedVanId}>
-              <SelectTrigger className="rounded-xl"><SelectValue placeholder="Select a van..." /></SelectTrigger>
-              <SelectContent>
-                {vans.map(v => <SelectItem key={v.id} value={v.id}>{v.name}</SelectItem>)}
-              </SelectContent>
-            </Select>
+            {isMobile ? (
+              <VanPickerDrawer vans={vans} selectedVanId={selectedVanId} onSelect={setSelectedVanId} />
+            ) : (
+              <select
+                value={selectedVanId}
+                onChange={e => setSelectedVanId(e.target.value)}
+                className="w-full px-3 py-2 border border-input rounded-xl bg-background text-sm"
+              >
+                <option value="">Select a van...</option>
+                {vans.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
+              </select>
+            )}
           </div>
 
           <div className="space-y-1.5">
             <Label className="text-sm font-bold">Rating</Label>
             <div className="flex gap-1">
               {[1,2,3,4,5].map(n => (
-                <button key={n} onClick={() => setRating(n)} className="text-2xl transition-transform hover:scale-110">
+                <button key={n} onClick={() => setRating(n)} className="text-2xl transition-transform hover:scale-110 active:scale-95">
                   {n <= rating ? '⭐' : '☆'}
                 </button>
               ))}
@@ -80,24 +131,12 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
 
           <div className="space-y-1.5">
             <Label className="text-sm font-bold">Comment <span className="font-normal text-muted-foreground">(optional)</span></Label>
-            <Textarea
-              placeholder="How was it? What did you try?"
-              value={comment}
-              onChange={e => setComment(e.target.value)}
-              className="rounded-xl resize-none h-20"
-              maxLength={300}
-            />
+            <Textarea placeholder="How was it? What did you try?" value={comment} onChange={e => setComment(e.target.value)} className="rounded-xl resize-none h-20" maxLength={300} />
           </div>
 
           <div className="space-y-1.5">
             <Label className="text-sm font-bold">Your name <span className="font-normal text-muted-foreground">(optional)</span></Label>
-            <Input
-              placeholder="e.g. Emma"
-              value={reviewerName}
-              onChange={e => setReviewerName(e.target.value)}
-              className="rounded-xl"
-              maxLength={40}
-            />
+            <Input placeholder="e.g. Emma" value={reviewerName} onChange={e => setReviewerName(e.target.value)} className="rounded-xl" maxLength={40} />
           </div>
 
           <div className="space-y-1.5">
@@ -112,8 +151,7 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
           </div>
 
           <Button onClick={handleSubmit} disabled={loading} className="w-full rounded-xl">
-            {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : '⭐ '}
-            Post Review
+            {loading ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Posting...</> : '⭐ Post Review'}
           </Button>
         </div>
       </DialogContent>

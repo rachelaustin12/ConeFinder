@@ -118,7 +118,7 @@ export default function Hunt() {
 
   return (
     <div className="min-h-screen bg-background font-nunito">
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center gap-3">
           <Link to="/" className="p-1.5 rounded-xl hover:bg-muted transition-colors">
             <Home className="w-5 h-5 text-muted-foreground" />
