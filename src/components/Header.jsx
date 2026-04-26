@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { IceCream, Map, Truck } from 'lucide-react';
+import { IceCream, Truck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function Header() {
@@ -21,7 +21,6 @@ export default function Header() {
         <nav className="flex items-center gap-2">
           <Link to="/">
             <Button variant={!isDriver ? "default" : "ghost"} size="sm" className="font-body gap-1.5 rounded-xl">
-              <Map className="w-4 h-4" />
               <span className="hidden sm:inline">Find Vans</span>
             </Button>
           </Link>
