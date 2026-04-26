@@ -51,14 +51,17 @@ export default function Hunt() {
   const playJingle = () => {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     // Simple ice-cream-van style jingle: "Greensleeves" opening notes
-    // "Happy" by Pharrell Williams - opening riff
+    // "Greensleeves" - classic UK ice cream van tune
     const notes = [
-      { freq: 392, dur: 0.1 }, { freq: 392, dur: 0.1 }, { freq: 440, dur: 0.1 },
-      { freq: 392, dur: 0.1 }, { freq: 392, dur: 0.1 }, { freq: 349, dur: 0.1 },
-      { freq: 330, dur: 0.2 }, { freq: 330, dur: 0.1 }, { freq: 294, dur: 0.1 },
-      { freq: 330, dur: 0.1 }, { freq: 392, dur: 0.15 }, { freq: 440, dur: 0.15 },
-      { freq: 494, dur: 0.2 }, { freq: 440, dur: 0.1 }, { freq: 392, dur: 0.1 },
-      { freq: 440, dur: 0.3 }, { freq: 392, dur: 0.1 }, { freq: 330, dur: 0.35 },
+      { freq: 440, dur: 0.3 }, { freq: 523, dur: 0.2 }, { freq: 587, dur: 0.3 },
+      { freq: 659, dur: 0.2 }, { freq: 622, dur: 0.15 }, { freq: 587, dur: 0.3 },
+      { freq: 494, dur: 0.45 }, { freq: 440, dur: 0.15 }, { freq: 392, dur: 0.3 },
+      { freq: 349, dur: 0.2 }, { freq: 392, dur: 0.15 }, { freq: 440, dur: 0.3 },
+      { freq: 494, dur: 0.45 }, { freq: 494, dur: 0.15 }, { freq: 523, dur: 0.3 },
+      { freq: 587, dur: 0.2 }, { freq: 659, dur: 0.15 }, { freq: 698, dur: 0.3 },
+      { freq: 659, dur: 0.2 }, { freq: 622, dur: 0.15 }, { freq: 587, dur: 0.3 },
+      { freq: 494, dur: 0.45 }, { freq: 440, dur: 0.15 }, { freq: 392, dur: 0.3 },
+      { freq: 349, dur: 0.2 }, { freq: 415, dur: 0.15 }, { freq: 440, dur: 0.6 },
     ];
     let t = ctx.currentTime + 0.05;
     notes.forEach(({ freq, dur }) => {
