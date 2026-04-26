@@ -45,7 +45,7 @@ export default function VanCard({ van, userPosition }) {
                 : (van.driver_name || 'Anonymous Driver')}
             </p>
             {van.note && (
-              <p className="text-xs text-muted-foreground mt-0.5 italic">"{van.note}"</p>
+              <p className="text-xs text-muted-foreground mt-0.5">"{van.note}"</p>
             )}
             {van.specialties && (
                 <div className="flex flex-wrap gap-1 mt-2">

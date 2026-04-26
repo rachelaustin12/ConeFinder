@@ -30,7 +30,7 @@ export default function VanMarkerPopup({ van }) {
       </div>
 
       {van.note && (
-        <p className="text-xs text-gray-500 italic mb-2">"{van.note}"</p>
+        <p className="text-xs text-gray-500 mb-2">"{van.note}"</p>
       )}
 
       {van.specialties && (
