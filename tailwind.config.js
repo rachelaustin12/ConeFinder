@@ -5,7 +5,7 @@ module.exports = {
   theme: {
   	extend: {
       fontFamily: {
-        nunito: ['Nunito', 'sans-serif'],
+        nunito: ['Fredoka', 'sans-serif'],
         pacifico: ['Pacifico', 'cursive'],
       },
   		borderRadius: {
