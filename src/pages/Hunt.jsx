@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { IceCream, Loader2, ArrowLeft, Plus } from 'lucide-react';
+import { IceCream, Loader2, ArrowLeft, Plus, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import VanMap from '../components/VanMap';
 import VanCard from '../components/VanCard';
 import ReportSightingModal from '../components/ReportSightingModal';
+import AddReviewModal from '../components/AddReviewModal';
 
 export default function Hunt() {
   const [userPos, setUserPos] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false);
   const queryClient = useQueryClient();
 
   const playJingle = () => {
@@ -83,7 +85,7 @@ export default function Hunt() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background font-inter">
+    <div className="min-h-screen bg-background font-nunito">
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center gap-3">
           <Link to="/" className="p-1.5 rounded-xl hover:bg-muted transition-colors">
@@ -91,6 +93,15 @@ export default function Hunt() {
           </Link>
           <span className="text-xl">🔍</span>
           <h1 className="font-pacifico text-xl text-foreground flex-1">Hunt for Ice Cream</h1>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setShowReviewModal(true)}
+            className="rounded-xl gap-1.5"
+          >
+            <Star className="w-4 h-4" />
+            Review
+          </Button>
           <Button
             size="sm"
             onClick={() => { playJingle(); setShowModal(true); }}
@@ -154,6 +165,12 @@ export default function Hunt() {
         onClose={() => setShowModal(false)}
         vans={vans}
         onReported={() => queryClient.invalidateQueries({ queryKey: ['van-sightings'] })}
+      />
+      <AddReviewModal
+        open={showReviewModal}
+        onClose={() => setShowReviewModal(false)}
+        vans={vans}
+        onReviewed={() => {}}
       />
     </div>
   );

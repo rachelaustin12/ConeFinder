@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { Loader2, IceCream, Pencil } from 'lucide-react';
+import { Loader2, IceCream, Pencil, Camera } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Header from '../components/Header';
 import VanSetupForm from '../components/VanSetupForm';
@@ -46,10 +46,17 @@ export default function Driver() {
   };
 
   const handleEditSave = async () => {
+    let image_url = editForm.image_url;
+    if (editForm.photoFile) {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file: editForm.photoFile });
+      image_url = file_url;
+    }
     await base44.entities.IceCreamVan.update(myVan.id, {
       name: editForm.name,
       driver_name: editForm.driver_name,
       specialties: editForm.specialties,
+      pricing: editForm.pricing,
+      image_url,
     });
     queryClient.invalidateQueries({ queryKey: ['my-van'] });
     setEditing(false);
@@ -58,7 +65,7 @@ export default function Driver() {
 
   if (loadingUser || (user && loadingVans)) {
     return (
-      <div className="min-h-screen bg-background font-body">
+      <div className="min-h-screen bg-background font-nunito">
         <Header />
         <div className="flex items-center justify-center py-24">
           <Loader2 className="w-6 h-6 animate-spin text-primary" />
@@ -69,13 +76,13 @@ export default function Driver() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-background font-body">
+      <div className="min-h-screen bg-background font-nunito">
         <Header />
         <div className="max-w-md mx-auto px-4 py-16 text-center">
           <div className="text-5xl mb-4">🚐</div>
           <h2 className="font-heading text-2xl font-bold mb-2">Driver Dashboard</h2>
           <p className="text-muted-foreground mb-6">Sign in to manage your ice cream van and share your location with customers.</p>
-          <Button onClick={() => base44.auth.redirectToLogin()} className="rounded-xl font-body">
+          <Button onClick={() => base44.auth.redirectToLogin()} className="rounded-xl font-nunito">
             Sign In to Continue
           </Button>
         </div>
@@ -84,7 +91,7 @@ export default function Driver() {
   }
 
   return (
-    <div className="min-h-screen bg-background font-body">
+    <div className="min-h-screen bg-background font-nunito">
       <Header />
       <main className="max-w-2xl mx-auto px-4 py-6">
         {!myVan ? (
@@ -116,19 +123,37 @@ export default function Driver() {
                       <Label className="text-xs font-semibold">Specialties</Label>
                       <Textarea value={editForm.specialties} onChange={e => setEditForm({...editForm, specialties: e.target.value})} className="rounded-xl resize-none h-16" />
                     </div>
+                    <div className="space-y-1.5">
+                      <Label className="text-xs font-semibold">Pricing</Label>
+                      <Input placeholder="e.g. Cones from £1.50, Flake 99 £2.50" value={editForm.pricing} onChange={e => setEditForm({...editForm, pricing: e.target.value})} className="rounded-xl" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label className="text-xs font-semibold">Van Photo</Label>
+                      <label className="flex items-center gap-2 cursor-pointer border border-dashed border-border rounded-xl p-3 hover:bg-muted/40 transition-colors">
+                        <Camera className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-sm text-muted-foreground">
+                          {editForm.photoFile ? editForm.photoFile.name : (editForm.image_url ? 'Change photo' : 'Upload a photo of your van')}
+                        </span>
+                        <input type="file" accept="image/*" className="hidden" onChange={e => setEditForm({...editForm, photoFile: e.target.files[0]})} />
+                      </label>
+                    </div>
                     <div className="flex gap-2">
-                      <Button size="sm" className="rounded-xl font-body" onClick={handleEditSave}>Save</Button>
-                      <Button size="sm" variant="ghost" className="rounded-xl font-body" onClick={() => setEditing(false)}>Cancel</Button>
+                      <Button size="sm" className="rounded-xl font-nunito" onClick={handleEditSave}>Save</Button>
+                      <Button size="sm" variant="ghost" className="rounded-xl font-nunito" onClick={() => setEditing(false)}>Cancel</Button>
                     </div>
                   </div>
                 ) : (
                   <div className="flex items-start justify-between">
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                        <IceCream className="w-5 h-5 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="font-heading font-semibold">{myVan.name}</h3>
+                    <div className="flex items-start gap-3 flex-1 min-w-0">
+                      {myVan.image_url ? (
+                        <img src={myVan.image_url} alt={myVan.name} className="w-14 h-14 rounded-xl object-cover shrink-0" />
+                      ) : (
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                          <IceCream className="w-5 h-5 text-primary" />
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold">{myVan.name}</h3>
                         <p className="text-xs text-muted-foreground">{myVan.driver_name || 'No name set'}</p>
                         {myVan.specialties && (
                           <div className="flex flex-wrap gap-1 mt-2">
@@ -137,6 +162,9 @@ export default function Driver() {
                             ))}
                           </div>
                         )}
+                        {myVan.pricing && (
+                          <p className="text-xs text-muted-foreground mt-1.5">💰 {myVan.pricing}</p>
+                        )}
                       </div>
                     </div>
                     <Button
@@ -144,7 +172,7 @@ export default function Driver() {
                       variant="ghost"
                       className="rounded-xl"
                       onClick={() => {
-                        setEditForm({ name: myVan.name, driver_name: myVan.driver_name || '', specialties: myVan.specialties || '' });
+                        setEditForm({ name: myVan.name, driver_name: myVan.driver_name || '', specialties: myVan.specialties || '', pricing: myVan.pricing || '', image_url: myVan.image_url || '', photoFile: null });
                         setEditing(true);
                       }}
                     >

@@ -18,6 +18,10 @@
       "type": "string",
       "description": "What the van offers, e.g. soft serve, gelato, popsicles"
     },
+    "pricing": {
+      "type": "string",
+      "description": "Pricing info, e.g. Cones from \u00a31.50, Flake 99 \u00a32.50"
+    },
     "latitude": {
       "type": "number",
       "description": "Current latitude"

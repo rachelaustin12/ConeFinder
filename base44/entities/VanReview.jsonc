@@ -1,0 +1,35 @@
+{
+  "name": "VanReview",
+  "type": "object",
+  "properties": {
+    "van_id": {
+      "type": "string",
+      "description": "ID of the IceCreamVan being reviewed"
+    },
+    "van_name": {
+      "type": "string",
+      "description": "Name of the van for display"
+    },
+    "reviewer_name": {
+      "type": "string",
+      "description": "Name of the reviewer"
+    },
+    "rating": {
+      "type": "number",
+      "description": "Rating 1-5"
+    },
+    "comment": {
+      "type": "string",
+      "description": "Review text"
+    },
+    "photo_url": {
+      "type": "string",
+      "description": "Optional photo uploaded by the hunter"
+    }
+  },
+  "required": [
+    "van_id",
+    "van_name",
+    "rating"
+  ]
+}
