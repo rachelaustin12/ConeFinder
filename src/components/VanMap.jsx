@@ -55,8 +55,10 @@ export default function VanMap({ vans, className = "" }) {
     <div className={`rounded-2xl overflow-hidden shadow-lg border border-border ${className}`}>
       <MapContainer center={center} zoom={13} className="w-full h-full" style={{ minHeight: '400px' }}>
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          subdomains="abcd"
+          maxZoom={20}
         />
         <FlyToUser position={userPos} />
         {userPos && <Marker position={userPos} icon={userIcon} />}
