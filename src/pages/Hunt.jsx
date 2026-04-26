@@ -51,12 +51,14 @@ export default function Hunt() {
   const playJingle = () => {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     // Simple ice-cream-van style jingle: "Greensleeves" opening notes
+    // "Happy" by Pharrell Williams - opening riff
     const notes = [
-      { freq: 392, dur: 0.3 }, { freq: 440, dur: 0.15 }, { freq: 523, dur: 0.3 },
-      { freq: 494, dur: 0.15 }, { freq: 440, dur: 0.3 }, { freq: 392, dur: 0.3 },
-      { freq: 349, dur: 0.45 }, { freq: 294, dur: 0.15 }, { freq: 330, dur: 0.3 },
-      { freq: 392, dur: 0.3 }, { freq: 440, dur: 0.45 }, { freq: 392, dur: 0.15 },
-      { freq: 349, dur: 0.3 }, { freq: 330, dur: 0.6 },
+      { freq: 392, dur: 0.1 }, { freq: 392, dur: 0.1 }, { freq: 440, dur: 0.1 },
+      { freq: 392, dur: 0.1 }, { freq: 392, dur: 0.1 }, { freq: 349, dur: 0.1 },
+      { freq: 330, dur: 0.2 }, { freq: 330, dur: 0.1 }, { freq: 294, dur: 0.1 },
+      { freq: 330, dur: 0.1 }, { freq: 392, dur: 0.15 }, { freq: 440, dur: 0.15 },
+      { freq: 494, dur: 0.2 }, { freq: 440, dur: 0.1 }, { freq: 392, dur: 0.1 },
+      { freq: 440, dur: 0.3 }, { freq: 392, dur: 0.1 }, { freq: 330, dur: 0.35 },
     ];
     let t = ctx.currentTime + 0.05;
     notes.forEach(({ freq, dur }) => {
@@ -64,7 +66,7 @@ export default function Hunt() {
       const gain = ctx.createGain();
       osc.connect(gain);
       gain.connect(ctx.destination);
-      osc.type = 'triangle';
+      osc.type = 'square';
       osc.frequency.setValueAtTime(freq, t);
       gain.gain.setValueAtTime(0.3, t);
       gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
