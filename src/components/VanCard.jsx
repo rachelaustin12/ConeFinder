@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { IceCream, Clock, Navigation } from 'lucide-react';
+import { IceCream, Clock, Navigation, Eye } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { motion } from 'framer-motion';
 
@@ -31,18 +31,23 @@ export default function VanCard({ van, userPosition }) {
       <Card className="overflow-hidden hover:shadow-md transition-shadow border-border/60 bg-card">
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-              <IceCream className="w-5 h-5 text-primary" />
+          <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${van.isSighting ? 'bg-accent/10' : 'bg-primary/10'}`}>
+            {van.isSighting ? <Eye className="w-5 h-5 text-accent" /> : <IceCream className="w-5 h-5 text-primary" />}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="font-heading font-semibold text-sm truncate">{van.name}</h3>
+              <div className={`w-2 h-2 rounded-full shrink-0 animate-pulse ${van.isSighting ? 'bg-accent' : 'bg-green-400'}`} />
             </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between gap-2">
-                <h3 className="font-heading font-semibold text-sm truncate">{van.name}</h3>
-                <div className="w-2 h-2 rounded-full bg-green-400 shrink-0 animate-pulse" />
-              </div>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                {van.driver_name || 'Anonymous Driver'}
-              </p>
-              {van.specialties && (
+            <p className="text-xs text-muted-foreground mt-0.5">
+              {van.isSighting
+                ? `Spotted by ${van.reporter_name || 'a hunter'}`
+                : (van.driver_name || 'Anonymous Driver')}
+            </p>
+            {van.note && (
+              <p className="text-xs text-muted-foreground mt-0.5 italic">"{van.note}"</p>
+            )}
+            {van.specialties && (
                 <div className="flex flex-wrap gap-1 mt-2">
                   {van.specialties.split(',').slice(0, 3).map((s, i) => (
                     <Badge key={i} variant="secondary" className="text-[10px] py-0 px-1.5 font-body">

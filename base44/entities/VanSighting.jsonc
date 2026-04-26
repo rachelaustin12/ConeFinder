@@ -1,0 +1,41 @@
+{
+  "name": "VanSighting",
+  "type": "object",
+  "properties": {
+    "van_id": {
+      "type": "string",
+      "description": "ID of the IceCreamVan being sighted"
+    },
+    "van_name": {
+      "type": "string",
+      "description": "Name of the van for display"
+    },
+    "latitude": {
+      "type": "number",
+      "description": "Latitude where the sighting was reported"
+    },
+    "longitude": {
+      "type": "number",
+      "description": "Longitude where the sighting was reported"
+    },
+    "reporter_name": {
+      "type": "string",
+      "description": "Optional name of the person reporting"
+    },
+    "note": {
+      "type": "string",
+      "description": "Optional short note e.g. 'outside the park gates'"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this sighting expires (set to end of day)"
+    }
+  },
+  "required": [
+    "van_id",
+    "van_name",
+    "latitude",
+    "longitude"
+  ]
+}

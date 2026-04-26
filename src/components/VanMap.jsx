@@ -11,6 +11,14 @@ const vanIcon = new L.DivIcon({
   className: ''
 });
 
+const sightingIcon = new L.DivIcon({
+  html: `<div style="font-size:28px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.2));">📍</div>`,
+  iconSize: [36, 36],
+  iconAnchor: [18, 36],
+  popupAnchor: [0, -30],
+  className: ''
+});
+
 const userIcon = new L.DivIcon({
   html: `<div style="width:14px;height:14px;background:hsl(340,75%,55%);border:3px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.3);"></div>`,
   iconSize: [14, 14],
@@ -53,7 +61,7 @@ export default function VanMap({ vans, className = "" }) {
         <FlyToUser position={userPos} />
         {userPos && <Marker position={userPos} icon={userIcon} />}
         {vans.filter(v => v.is_active && v.latitude && v.longitude).map(van => (
-          <Marker key={van.id} position={[van.latitude, van.longitude]} icon={vanIcon}>
+          <Marker key={van.id} position={[van.latitude, van.longitude]} icon={van.isSighting ? sightingIcon : vanIcon}>
             <Popup>
               <VanMarkerPopup van={van} />
             </Popup>
