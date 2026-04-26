@@ -14,6 +14,32 @@ export default function Hunt() {
   const [showModal, setShowModal] = useState(false);
   const queryClient = useQueryClient();
 
+  const playJingle = () => {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // Simple ice-cream-van style jingle: "Greensleeves" opening notes
+    const notes = [
+      { freq: 392, dur: 0.3 }, { freq: 440, dur: 0.15 }, { freq: 523, dur: 0.3 },
+      { freq: 494, dur: 0.15 }, { freq: 440, dur: 0.3 }, { freq: 392, dur: 0.3 },
+      { freq: 349, dur: 0.45 }, { freq: 294, dur: 0.15 }, { freq: 330, dur: 0.3 },
+      { freq: 392, dur: 0.3 }, { freq: 440, dur: 0.45 }, { freq: 392, dur: 0.15 },
+      { freq: 349, dur: 0.3 }, { freq: 330, dur: 0.6 },
+    ];
+    let t = ctx.currentTime + 0.05;
+    notes.forEach(({ freq, dur }) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, t);
+      gain.gain.setValueAtTime(0.3, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      osc.start(t);
+      osc.stop(t + dur);
+      t += dur;
+    });
+  };
+
   const { data: vans = [], isLoading } = useQuery({
     queryKey: ['active-vans'],
     queryFn: () => base44.entities.IceCreamVan.filter({ is_active: true }),
@@ -67,7 +93,7 @@ export default function Hunt() {
           <h1 className="font-pacifico text-xl text-foreground flex-1">Hunt for Ice Cream</h1>
           <Button
             size="sm"
-            onClick={() => setShowModal(true)}
+            onClick={() => { playJingle(); setShowModal(true); }}
             className="rounded-xl gap-1.5 bg-accent hover:bg-accent/90 text-accent-foreground"
           >
             <Plus className="w-4 h-4" />
@@ -110,7 +136,7 @@ export default function Hunt() {
             <p className="text-muted-foreground text-sm mb-4">
               Be the first to report a sighting!
             </p>
-            <Button onClick={() => setShowModal(true)} className="rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground">
+            <Button onClick={() => { playJingle(); setShowModal(true); }} className="rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground">
               📍 I found a van!
             </Button>
           </motion.div>
