@@ -52,24 +52,24 @@ export default function VanMap({ vans, className = "" }) {
   const center = userPos || defaultCenter;
 
   return (
-    <div className={`rounded-2xl overflow-hidden shadow-lg border border-border ${className}`}>
+    <div className="mb-6 rounded-2xl overflow-hidden shadow-lg border border-border h-[50vh]">
       <MapContainer center={center} zoom={13} className="w-full h-full" style={{ minHeight: '400px' }}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
           url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
           subdomains="abcd"
-          maxZoom={20}
-        />
+          maxZoom={20} />
+        
         <FlyToUser position={userPos} />
         {userPos && <Marker position={userPos} icon={userIcon} />}
-        {vans.filter(v => v.is_active && v.latitude && v.longitude).map(van => (
-          <Marker key={van.id} position={[van.latitude, van.longitude]} icon={van.isSighting ? sightingIcon : vanIcon}>
+        {vans.filter((v) => v.is_active && v.latitude && v.longitude).map((van) =>
+        <Marker key={van.id} position={[van.latitude, van.longitude]} icon={van.isSighting ? sightingIcon : vanIcon}>
             <Popup>
               <VanMarkerPopup van={van} />
             </Popup>
           </Marker>
-        ))}
+        )}
       </MapContainer>
-    </div>
-  );
+    </div>);
+
 }
