@@ -135,7 +135,7 @@ export default function ReportSightingModal({ open, onClose, vans, onReported })
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="rounded-3xl max-w-sm font-nunito">
+      <DialogContent className="rounded-3xl max-w-sm font-nunito z-[9999]">
         <DialogHeader>
           <DialogTitle className="font-pacifico text-xl flex items-center gap-2">
             <MapPin className="w-5 h-5 text-accent" />
