@@ -69,7 +69,7 @@ export default function VanSetupForm({ user, onCreated }) {
           />
         </div>
         <div className="space-y-2">
-          <Label className="font-body font-semibold text-sm">Sell yourself!</Label>
+          <Label className="font-body font-semibold text-sm">Time to sell yourself...</Label>
           <Textarea
             placeholder="e.g. Soft serve, Gelato, Popsicles, Milkshakes"
             value={specialties}
