@@ -48,37 +48,6 @@ export default function Hunt() {
     };
   }, [pullStart, pullDelta, handleRefresh]);
 
-  const playJingle = () => {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const t0 = ctx.currentTime + 0.05;
-
-    // Greensleeves opening phrase — "Alas my love, you do me wrong, to cast me off discourteously"
-    // [freq, duration]
-    const notes = [
-      [220, 0.45], [261, 0.2], [311, 0.45], [261, 0.2], [293, 0.45], [261, 0.2],
-      [246, 0.45], [220, 0.2], [220, 0.45], [196, 0.2], [220, 0.45], [246, 0.2],
-      [261, 0.75],
-      [261, 0.45], [293, 0.2], [349, 0.45], [311, 0.2], [329, 0.45], [293, 0.2],
-      [311, 0.45], [261, 0.2], [246, 0.45], [220, 0.2], [196, 0.2], [220, 0.9],
-    ];
-
-    let t = t0;
-    notes.forEach(([freq, dur]) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, t);
-      gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.25, t + 0.02);
-      gain.gain.setValueAtTime(0.2, t + dur * 0.75);
-      gain.gain.linearRampToValueAtTime(0, t + dur * 0.95);
-      osc.start(t);
-      osc.stop(t + dur);
-      t += dur;
-    });
-  };
 
   const { data: vans = [], isLoading } = useQuery({
     queryKey: ['active-vans'],
@@ -142,7 +111,7 @@ export default function Hunt() {
           </Button>
           <Button
             size="sm"
-            onClick={() => { playJingle(); setShowModal(true); }}
+            onClick={() => setShowModal(true)}
             className="rounded-xl gap-1.5 bg-accent hover:bg-accent/90 text-accent-foreground"
           >
             <Plus className="w-4 h-4" />
@@ -194,7 +163,7 @@ export default function Hunt() {
             <p className="text-muted-foreground text-sm mb-4">
               Be the first to report a sighting!
             </p>
-            <Button onClick={() => { playJingle(); setShowModal(true); }} className="rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground">
+            <Button onClick={() => setShowModal(true)} className="rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground">
               📍 I found a van!
             </Button>
           </motion.div>
