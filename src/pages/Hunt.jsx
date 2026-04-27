@@ -141,7 +141,7 @@ export default function Hunt() {
           </Button>
           <Button
             size="sm"
-            onClick={() => {playJingle();setShowModal(true);}} className="bg-[hsl(var(--input))] text-[hsl(var(--background))] px-3 text-base font-thin rounded-xl inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-8 gap-1.5 hover:bg-accent/90">
+            onClick={() => {playJingle();setShowModal(true);}} className="bg-[#1499d2] text-[hsl(var(--background))] px-3 text-base font-thin rounded-xl inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-8 gap-1.5 hover:bg-accent/90">
             
             
             <Plus className="w-4 h-4" />
