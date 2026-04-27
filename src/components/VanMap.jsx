@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Tooltip, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import VanMarkerPopup from './VanMarkerPopup';
 
@@ -64,6 +64,9 @@ export default function VanMap({ vans, className = "" }) {
         {userPos && <Marker position={userPos} icon={userIcon} />}
         {vans.filter((v) => v.is_active && v.latitude && v.longitude).map((van) =>
         <Marker key={van.id} position={[van.latitude, van.longitude]} icon={van.isSighting ? sightingIcon : vanIcon}>
+            <Tooltip permanent direction="top" offset={[0, -38]} opacity={1} className="van-label">
+              <span style={{ fontWeight: 600, fontSize: '12px', whiteSpace: 'nowrap' }}>{van.name}</span>
+            </Tooltip>
             <Popup>
               <VanMarkerPopup van={van} />
             </Popup>
