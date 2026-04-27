@@ -95,7 +95,7 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="rounded-3xl max-w-sm font-nunito">
         <DialogHeader>
-          <DialogTitle className="font-pacifico text-xl flex items-center gap-2">
+          <DialogTitle className="text-[hsl(var(--color-sky))] text-xl font-thin tracking-tight flex items-center gap-2">
             <Star className="w-5 h-5 text-yellow-400" />
             Leave a Review
           </DialogTitle>
