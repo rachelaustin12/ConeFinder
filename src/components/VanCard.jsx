@@ -38,7 +38,7 @@ export default function VanCard({ van, userPosition }) {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between gap-2">
-              <h3 className="bg-[hsl(var(--accent))] text-[hsl(var(--secondary))] text-2xl font-thin truncate">{van.name}</h3>
+              <h3 className="bg-[hsl(var(--color-sky))] text-[hsl(var(--secondary))] text-2xl font-thin truncate">{van.name}</h3>
               <div className={`w-2 h-2 rounded-full shrink-0 animate-pulse ${van.isSighting ? 'bg-accent' : 'bg-green-400'}`} />
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
