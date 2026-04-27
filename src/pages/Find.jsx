@@ -96,7 +96,7 @@ export default function Find() {
     <div className="min-h-screen bg-background font-nunito">
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-muted transition-colors md:hidden">
+          <button onClick={() => navigate('/')} className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-muted transition-colors md:hidden">
             <ChevronLeft className="w-5 h-5" />
           </button>
           <span className="text-xl hidden md:inline">🗺️</span>
