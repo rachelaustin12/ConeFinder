@@ -75,8 +75,8 @@ export default function VanCard({ van, userPosition }) {
                 </div>
                 {!van.isSighting && van.messages_enabled !== false &&
                 <button
-                  onClick={() => setShowMessage(true)}
-                  className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 font-semibold transition-colors">
+                  onClick={() => setShowMessage(true)} className="bg-[#ea9eb9] text-primary text-base font-semibold flex items-center gap-1 hover:text-primary/80 transition-colors">
+                  
                   
                     <MessageCircle className="w-3.5 h-3.5" />
                     Message
