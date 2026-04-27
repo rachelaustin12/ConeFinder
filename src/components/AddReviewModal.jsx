@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -114,10 +114,13 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="rounded-3xl max-w-sm font-nunito">
         <DialogHeader>
-          <DialogTitle className="text-[hsl(var(--color-sky))] text-xl font-thin tracking-tight flex items-center gap-2">
-            <Star className="w-5 h-5 text-yellow-400" />
-            Yes please or Brain freeze
-          </DialogTitle>
+         <DialogTitle className="text-[hsl(var(--color-sky))] text-xl font-thin tracking-tight flex items-center gap-2">
+           <Star className="w-5 h-5 text-yellow-400" />
+           What's your scoop?
+         </DialogTitle>
+         <DialogDescription className="text-sm text-muted-foreground">
+           Yes please or brain freeze?
+         </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 pt-1">
