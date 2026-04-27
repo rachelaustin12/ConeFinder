@@ -31,7 +31,7 @@ export default function BottomNav() {
   if (!isMobile || location.pathname === '/') return null;
 
   const links = [
-    { to: '/hunt', label: 'Hunt', icon: Search },
+    { to: '/find', label: 'Find', icon: Search },
     { to: '/driver', label: 'Driver', icon: Truck },
   ];
 

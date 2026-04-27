@@ -6,7 +6,7 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Home from './pages/Home';
-import Hunt from './pages/Hunt';
+import Find from './pages/Find';
 import Driver from './pages/Driver';
 import BottomNav from './components/BottomNav';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -25,7 +25,7 @@ const AnimatedRoutes = () => {
       >
         <Routes location={location}>
           <Route path="/" element={<Home />} />
-          <Route path="/hunt" element={<Hunt />} />
+          <Route path="/find" element={<Find />} />
           <Route path="/driver" element={<Driver />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>

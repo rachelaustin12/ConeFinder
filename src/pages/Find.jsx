@@ -10,7 +10,7 @@ import VanCard from '../components/VanCard';
 import ReportSightingModal from '../components/ReportSightingModal';
 import AddReviewModal from '../components/AddReviewModal';
 
-export default function Hunt() {
+export default function Find() {
   const [userPos, setUserPos] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);

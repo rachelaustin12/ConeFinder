@@ -26,7 +26,7 @@ export default function Home() {
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            onClick={() => navigate('/hunt')}
+            onClick={() => navigate('/find')}
             className="group flex flex-col items-center gap-3 rounded-3xl p-8 shadow-md hover:shadow-xl transition-all duration-200 border-2"
             style={{ background: 'linear-gradient(135deg, #e0f7fa, #b2ebf2)', borderColor: '#0ea5e9' }}>
             
