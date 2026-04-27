@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Loader2, IceCream, Pencil, Camera, Trash2, MessageCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
-import Header from '../components/Header';
+import { Link } from 'react-router-dom';
 import VanSetupForm from '../components/VanSetupForm';
 import DriverMessages from '../components/DriverMessages';
 import DriverLocationToggle from '../components/DriverLocationToggle';
@@ -78,10 +78,20 @@ export default function Driver() {
     toast.success("Van details updated!");
   };
 
+  const headerEl = (
+    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
+      <div className="max-w-5xl mx-auto px-4 h-14 flex items-center gap-3">
+        <Link to="/" className="p-1.5 rounded-xl hover:bg-muted transition-colors text-xl">🏠</Link>
+        <span className="text-xl">🚐</span>
+        <h1 className="text-[hsl(var(--color-sky))] text-xl font-thin flex-1">Driver Dashboard</h1>
+      </div>
+    </header>
+  );
+
   if (loadingUser || (user && loadingVans)) {
     return (
       <div className="min-h-screen bg-background font-nunito">
-        <Header />
+        {headerEl}
         <div className="flex items-center justify-center py-24">
           <Loader2 className="w-6 h-6 animate-spin text-primary" />
         </div>
@@ -92,7 +102,7 @@ export default function Driver() {
   if (!user) {
     return (
       <div className="min-h-screen bg-background font-nunito">
-        <Header />
+        {headerEl}
         <div className="max-w-md mx-auto px-4 py-16 text-center">
           <div className="text-5xl mb-4">🚐</div>
           <h2 className="font-heading text-2xl font-bold mb-2">Driver Dashboard</h2>
@@ -107,7 +117,7 @@ export default function Driver() {
 
   return (
     <div className="min-h-screen bg-background font-nunito">
-      <Header />
+      {headerEl}
       <main className="max-w-2xl mx-auto px-4 py-6">
         {!myVan ? (
           <VanSetupForm user={user} onCreated={handleVanCreated} />
