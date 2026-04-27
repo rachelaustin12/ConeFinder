@@ -55,6 +55,11 @@ export default function Hunt() {
     refetchInterval: 15000
   });
 
+  const { data: allVansList = [] } = useQuery({
+    queryKey: ['all-vans'],
+    queryFn: () => base44.entities.IceCreamVan.list(),
+  });
+
   const { data: sightings = [] } = useQuery({
     queryKey: ['van-sightings'],
     queryFn: async () => {
@@ -185,7 +190,7 @@ export default function Hunt() {
       <AddReviewModal
         open={showReviewModal}
         onClose={() => setShowReviewModal(false)}
-        vans={vans}
+        vans={allVansList}
         onReviewed={() => {}} />
       
     </div>);
