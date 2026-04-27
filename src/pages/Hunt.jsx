@@ -48,6 +48,36 @@ export default function Hunt() {
     };
   }, [pullStart, pullDelta, handleRefresh]);
 
+  const playJingle = () => {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // Simple ice-cream-van style jingle: "Greensleeves" opening notes
+    // "Greensleeves" - classic UK ice cream van tune
+    const notes = [
+      { freq: 440, dur: 0.3 }, { freq: 523, dur: 0.2 }, { freq: 587, dur: 0.3 },
+      { freq: 659, dur: 0.2 }, { freq: 622, dur: 0.15 }, { freq: 587, dur: 0.3 },
+      { freq: 494, dur: 0.45 }, { freq: 440, dur: 0.15 }, { freq: 392, dur: 0.3 },
+      { freq: 349, dur: 0.2 }, { freq: 392, dur: 0.15 }, { freq: 440, dur: 0.3 },
+      { freq: 494, dur: 0.45 }, { freq: 494, dur: 0.15 }, { freq: 523, dur: 0.3 },
+      { freq: 587, dur: 0.2 }, { freq: 659, dur: 0.15 }, { freq: 698, dur: 0.3 },
+      { freq: 659, dur: 0.2 }, { freq: 622, dur: 0.15 }, { freq: 587, dur: 0.3 },
+      { freq: 494, dur: 0.45 }, { freq: 440, dur: 0.15 }, { freq: 392, dur: 0.3 },
+      { freq: 349, dur: 0.2 }, { freq: 415, dur: 0.15 }, { freq: 440, dur: 0.6 },
+    ];
+    let t = ctx.currentTime + 0.05;
+    notes.forEach(({ freq, dur }) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(freq, t);
+      gain.gain.setValueAtTime(0.3, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      osc.start(t);
+      osc.stop(t + dur);
+      t += dur;
+    });
+  };
 
   const { data: vans = [], isLoading } = useQuery({
     queryKey: ['active-vans'],
@@ -111,7 +141,7 @@ export default function Hunt() {
           </Button>
           <Button
             size="sm"
-            onClick={() => setShowModal(true)}
+            onClick={() => { playJingle(); setShowModal(true); }}
             className="rounded-xl gap-1.5 bg-accent hover:bg-accent/90 text-accent-foreground"
           >
             <Plus className="w-4 h-4" />
@@ -163,7 +193,7 @@ export default function Hunt() {
             <p className="text-muted-foreground text-sm mb-4">
               Be the first to report a sighting!
             </p>
-            <Button onClick={() => setShowModal(true)} className="rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground">
+            <Button onClick={() => { playJingle(); setShowModal(true); }} className="rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground">
               📍 I found a van!
             </Button>
           </motion.div>
