@@ -128,7 +128,7 @@ export default function Hunt() {
           <Link to="/" className="p-1.5 rounded-xl hover:bg-muted transition-colors">
             <Home className="w-5 h-5 text-muted-foreground" />
           </Link>
-          <span className="text-xl">🔍</span>
+          <span className="text-xl">🔭</span>
           <h1 className="bg-[hsl(var(--destructive-foreground))] text-[hsl(var(--color-sky))] text-xl font-thin flex-1">Hunt for Ice Cream </h1>
           <Button
             size="sm"
