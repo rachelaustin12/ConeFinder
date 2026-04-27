@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import VanMap from '../components/VanMap';
+import { useProximityAlerts } from '../hooks/useProximityAlerts';
 import VanCard from '../components/VanCard';
 import ReportSightingModal from '../components/ReportSightingModal';
 import AddReviewModal from '../components/AddReviewModal';
@@ -120,6 +121,8 @@ export default function Hunt() {
       );
     }
   }, []);
+
+  useProximityAlerts(vans, userPos);
 
   return (
     <div className="min-h-screen bg-background font-nunito">
