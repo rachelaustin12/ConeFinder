@@ -11,6 +11,13 @@ export default function BottomNav() {
   const isMobile = useIsMobile();
   const prevPath = useRef(location.pathname);
 
+  const handleTabClick = (to) => {
+    // If clicking the active tab, scroll to top
+    if (location.pathname === to) {
+      window.scrollTo(0, 0);
+    }
+  };
+
   useEffect(() => {
     const current = prevPath.current;
     const next = location.pathname;
@@ -46,7 +53,13 @@ export default function BottomNav() {
           <Link
             key={to}
             to={to}
-            className={`flex-1 flex flex-col items-center justify-center py-3 gap-0.5 text-xs font-semibold transition-colors ${
+            onClick={(e) => {
+              if (active) {
+                e.preventDefault();
+                handleTabClick(to);
+              }
+            }}
+            className={`flex-1 flex flex-col items-center justify-center min-h-[44px] gap-0.5 text-xs font-semibold transition-colors ${
               active ? 'text-primary' : 'text-muted-foreground'
             }`}
           >

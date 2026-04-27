@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { Loader2, IceCream, Pencil, Camera, Trash2, MessageCircle } from 'lucide-react';
+import { Loader2, IceCream, Pencil, Camera, Trash2, MessageCircle, ChevronLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import VanSetupForm from '../components/VanSetupForm';
 import DriverMessages from '../components/DriverMessages';
 import DriverLocationToggle from '../components/DriverLocationToggle';
@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/alert-dialog';
 
 export default function Driver() {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [editing, setEditing] = useState(false);
@@ -81,9 +82,11 @@ export default function Driver() {
   const headerEl = (
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
       <div className="max-w-5xl mx-auto px-4 h-14 flex items-center gap-3">
-        <Link to="/" className="p-1.5 rounded-xl hover:bg-muted transition-colors text-xl">🏠</Link>
-        <span className="text-xl">🚐</span>
-        <h1 className="text-[hsl(var(--color-sky))] text-xl font-thin flex-1">Driver Dashboard</h1>
+        <button onClick={() => navigate(-1)} className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-muted transition-colors md:hidden">
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        <span className="text-xl hidden md:inline">🚐</span>
+        <h1 className="text-[hsl(var(--color-sky))] text-lg font-semibold flex-1">Driver Dashboard</h1>
       </div>
     </header>
   );
@@ -137,21 +140,21 @@ export default function Driver() {
                 {editing ? (
                   <div className="space-y-4">
                     <div className="space-y-1.5">
-                      <Label className="text-xs font-semibold">Van Name</Label>
-                      <Input value={editForm.name} onChange={e => setEditForm({...editForm, name: e.target.value})} className="rounded-xl" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label className="text-xs font-semibold">Driver Name</Label>
-                      <Input value={editForm.driver_name} onChange={e => setEditForm({...editForm, driver_name: e.target.value})} className="rounded-xl" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label className="text-xs font-semibold">Specialties</Label>
-                      <Textarea value={editForm.specialties} onChange={e => setEditForm({...editForm, specialties: e.target.value})} className="rounded-xl resize-none h-16" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label className="text-xs font-semibold">Pricing</Label>
-                      <Input placeholder="e.g. Cones from £1.50, Flake 99 £2.50" value={editForm.pricing} onChange={e => setEditForm({...editForm, pricing: e.target.value})} className="rounded-xl" />
-                    </div>
+                       <Label className="text-xs font-semibold">Van Name</Label>
+                       <Input value={editForm.name} onChange={e => setEditForm({...editForm, name: e.target.value})} className="rounded-xl text-base" />
+                     </div>
+                     <div className="space-y-1.5">
+                       <Label className="text-xs font-semibold">Driver Name</Label>
+                       <Input value={editForm.driver_name} onChange={e => setEditForm({...editForm, driver_name: e.target.value})} className="rounded-xl text-base" />
+                     </div>
+                     <div className="space-y-1.5">
+                       <Label className="text-xs font-semibold">Specialties</Label>
+                       <Textarea value={editForm.specialties} onChange={e => setEditForm({...editForm, specialties: e.target.value})} className="rounded-xl resize-none h-16 text-base" />
+                     </div>
+                     <div className="space-y-1.5">
+                       <Label className="text-xs font-semibold">Pricing</Label>
+                       <Input placeholder="e.g. Cones from £1.50, Flake 99 £2.50" value={editForm.pricing} onChange={e => setEditForm({...editForm, pricing: e.target.value})} className="rounded-xl text-base" />
+                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-xs font-semibold">Van Photo</Label>
                       <label className="flex items-center gap-2 cursor-pointer border border-dashed border-border rounded-xl p-3 hover:bg-muted/40 transition-colors">
