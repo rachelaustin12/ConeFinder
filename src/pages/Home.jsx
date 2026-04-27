@@ -32,7 +32,7 @@ export default function Home() {
             
             <span className="text-5xl">🔍</span>
             <div>
-              <h2 className="font-nunito font-bold text-2xl mb-1" style={{ color: '#0284c7' }}>Hunter</h2>
+              <h2 className="font-nunito font-bold text-2xl mb-1" style={{ color: '#0284c7' }}>Finder</h2>
               <p className="text-xs font-thin" style={{ color: '#0369a1' }}>
                 Find ice cream vans near you
               </p>
