@@ -41,7 +41,7 @@ export default function VanCard({ van, userPosition }) {
               <h3 className="bg-[hsl(var(--color-cream))] text-[#3dbbff] text-2xl font-thin truncate">{van.name}</h3>
               <div className={`w-2 h-2 rounded-full shrink-0 animate-pulse ${van.isSighting ? 'bg-accent' : 'bg-green-400'}`} />
             </div>
-            <p className="text-[hsl(var(--primary))] mt-0.5 text-sm font-thin">
+            <p className="text-[hsl(var(--color-sunshine))] mt-0.5 text-sm font-thin">
               {van.isSighting ?
                 `Spotted by ${van.reporter_name || 'a hunter'}` :
                 van.driver_name || 'Anonymous Driver'}
