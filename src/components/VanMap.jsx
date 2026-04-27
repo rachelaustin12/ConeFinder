@@ -36,6 +36,33 @@ function FlyToUser({ position }) {
   return null;
 }
 
+function MyLocationButton({ userPos }) {
+  const map = useMap();
+  return (
+    <div style={{ position: 'absolute', bottom: '16px', right: '10px', zIndex: 1000 }}>
+      <button
+        onClick={() => userPos && map.flyTo(userPos, 15, { duration: 1.2 })}
+        title="Go to my location"
+        style={{
+          background: 'white',
+          border: '2px solid rgba(0,0,0,0.2)',
+          borderRadius: '8px',
+          width: '34px',
+          height: '34px',
+          cursor: 'pointer',
+          fontSize: '18px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
+        }}
+      >
+        📍
+      </button>
+    </div>
+  );
+}
+
 export default function VanMap({ vans, className = "" }) {
   const [userPos, setUserPos] = useState(null);
   const defaultCenter = [51.505, -0.09];
@@ -61,6 +88,7 @@ export default function VanMap({ vans, className = "" }) {
           maxZoom={20} />
         
         <FlyToUser position={userPos} />
+        <MyLocationButton userPos={userPos} />
         {userPos && <Marker position={userPos} icon={userIcon} />}
         {vans.filter((v) => v.is_active && v.latitude && v.longitude).map((van) =>
         <Marker key={van.id} position={[van.latitude, van.longitude]} icon={van.isSighting ? sightingIcon : vanIcon}>
