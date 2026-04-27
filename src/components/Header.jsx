@@ -14,7 +14,7 @@ export default function Header() {
           <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
             <IceCream className="w-5 h-5 text-primary" />
           </div>
-          <span className="font-heading font-bold text-foreground hidden sm:block">
+          <span className="font-heading font-bold text-foreground hidden sm:block hidden hidden">
             Where's the Ice Cream Van?
           </span>
         </Link>
@@ -32,6 +32,6 @@ export default function Header() {
           </Link>
         </nav>
       </div>
-    </header>
-  );
+    </header>);
+
 }
