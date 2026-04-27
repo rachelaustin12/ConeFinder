@@ -137,7 +137,7 @@ export default function ReportSightingModal({ open, onClose, vans, onReported })
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="rounded-3xl max-w-sm font-nunito">
         <DialogHeader>
-          <DialogTitle className="bg-[hsl(var(--muted))] text-[hsl(var(--color-sky))] text-xl font-thin tracking-tight flex items-center gap-2">🍦 I found a van!
+          <DialogTitle className="bg-[hsl(var(--muted))] text-[hsl(var(--color-sky))] text-xl font-thin tracking-tight flex items-center gap-2">🕵️ I found a van!
 
 
           </DialogTitle>
