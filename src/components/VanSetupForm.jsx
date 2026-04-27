@@ -46,7 +46,7 @@ export default function VanSetupForm({ user, onCreated }) {
           <Truck className="w-8 h-8 text-primary" />
         </div>
         <h2 className="font-heading text-2xl font-bold mb-1">Set Up Your Van</h2>
-        <p className="text-muted-foreground text-sm">Tell customers about your ice cream van</p>
+        <p className="text-muted-foreground text-sm hidden">Tell customers about your ice cream van</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -83,13 +83,13 @@ export default function VanSetupForm({ user, onCreated }) {
             <MessageCircle className="w-4 h-4 text-primary" />
             <div>
               <p className="text-sm font-semibold">Allow visit requests</p>
-              <p className="text-xs text-muted-foreground">Fc send you messages</p>
+              <p className="text-xs text-muted-foreground">Finders can send you messages
+</p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={() => setMessagesEnabled((v) => !v)}
-            className={`relative w-11 h-6 rounded-full transition-colors ${messagesEnabled ? 'bg-primary' : 'bg-muted-foreground/30'}`}>
+          <button type="button"
+          onClick={() => setMessagesEnabled((v) => !v)}
+          className={`relative w-11 h-6 rounded-full transition-colors ${messagesEnabled ? 'bg-primary' : 'bg-muted-foreground/30'}`}>
             
             <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${messagesEnabled ? 'translate-x-5' : 'translate-x-0'}`} />
           </button>
