@@ -50,7 +50,7 @@ export default function Home() {
             <span className="text-5xl">🚐</span>
             <div>
               <h2 className="font-nunito font-bold text-2xl mb-1" style={{ color: '#d97706' }}>Driver</h2>
-              <p className="text-xs font-nunito" style={{ color: '#b45309' }}>
+              <p className="text-xs font-thin" style={{ color: '#b45309' }}>
                 Share your live location with fans
               </p>
             </div>
