@@ -10,6 +10,9 @@ export default function BottomNav() {
   const prevPath = useRef(location.pathname);
 
   const handleTabClick = (to) => {
+    // Save current scroll before switching
+    scrollPositions.current[location.pathname] = window.scrollY;
+    
     // If clicking the active tab, scroll to top
     if (location.pathname === to) {
       window.scrollTo(0, 0);
@@ -17,22 +20,15 @@ export default function BottomNav() {
   };
 
   useEffect(() => {
-    const current = prevPath.current;
-    const next = location.pathname;
-
-    // Save scroll position before leaving
-    scrollPositions.current[current] = window.scrollY;
-
-    // Restore scroll position on entry with small delay to ensure DOM is ready
-    const timer = setTimeout(() => {
-      const savedScroll = scrollPositions.current[next];
-      if (typeof savedScroll === 'number') {
+    // Restore scroll position when entering a route
+    const savedScroll = scrollPositions.current[location.pathname];
+    if (typeof savedScroll === 'number' && savedScroll > 0) {
+      requestAnimationFrame(() => {
         window.scrollTo(0, savedScroll);
-      }
-    }, 0);
+      });
+    }
 
-    prevPath.current = next;
-    return () => clearTimeout(timer);
+    prevPath.current = location.pathname;
   }, [location.pathname]);
 
   if (!isMobile || location.pathname === '/') return null;
