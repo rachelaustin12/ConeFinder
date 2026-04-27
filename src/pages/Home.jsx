@@ -13,11 +13,7 @@ export default function Home() {
         transition={{ duration: 0.5 }}
         className="text-center max-w-lg w-full"
       >
-        <div className="text-7xl mb-4 drop-shadow-md relative inline-block">
-          🍦
-          <span className="absolute -top-2 -right-3 text-3xl">🍫</span>
-          <span className="absolute top-0 -left-3 text-2xl rotate-12">✨</span>
-        </div>
+        <div className="text-7xl mb-4 drop-shadow-md">🍦</div>
         <h1 className="font-nunito font-bold text-4xl sm:text-5xl mb-3" style={{color: '#0ea5e9'}}>
           Where's the Ice Cream Van?
         </h1>
