@@ -32,7 +32,7 @@ export default function VanCard({ van, userPosition }) {
       
       <Card className="overflow-hidden hover:shadow-md transition-shadow border-border/60 bg-card">
         <CardContent className="p-4">
-          <div className="flex items-start gap-3">
+          <div className="bg-[hsl(var(--color-cream))] flex items-start gap-3">
           <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${van.isSighting ? 'bg-accent/10' : 'bg-primary/10'}`}>
             {van.isSighting ? <Eye className="w-5 h-5 text-accent" /> : <IceCream className="w-5 h-5 text-primary" />}
           </div>
