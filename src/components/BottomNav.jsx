@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Search, Truck } from 'lucide-react';
+import { Search, Truck, Home } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useEffect, useRef } from 'react';
 
@@ -34,6 +34,7 @@ export default function BottomNav() {
   if (!isMobile || location.pathname === '/') return null;
 
   const links = [
+    { to: '/', label: 'Home', icon: Home },
     { to: '/find', label: 'Find', icon: Search },
     { to: '/driver', label: 'Driver', icon: Truck },
   ];
