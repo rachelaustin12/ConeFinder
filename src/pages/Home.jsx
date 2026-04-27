@@ -17,9 +17,7 @@ export default function Home() {
         <h1 className="font-nunito font-bold text-4xl sm:text-5xl mb-3" style={{color: '#0ea5e9'}}>
           What's the Scoop?
         </h1>
-        <p className="font-nunito mb-12 text-lg" style={{color: '#f472b6'}}>
-          Are you a driver or an ice cream hunter?
-        </p>
+
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Hunter */}
