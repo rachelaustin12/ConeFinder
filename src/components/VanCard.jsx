@@ -79,7 +79,7 @@ export default function VanCard({ van, userPosition }) {
                   
                   
                     <MessageCircle className="w-3.5 h-3.5" />
-                    Message
+                    Message me
                   </button>
                 }
               </div>
