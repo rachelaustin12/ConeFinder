@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -146,6 +146,9 @@ export default function ReportSightingModal({ open, onClose, vans, onReported })
           <DialogTitle className="bg-[hsl(var(--muted))] text-[hsl(var(--color-sky))] text-xl font-thin tracking-tight flex items-center gap-2">
             🕵️ I found a van!
           </DialogTitle>
+          <DialogDescription className="text-sm text-muted-foreground">
+            Report a sighting to help others find ice cream
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 pt-1">
