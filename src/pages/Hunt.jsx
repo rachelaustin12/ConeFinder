@@ -50,31 +50,102 @@ export default function Hunt() {
 
   const playJingle = () => {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    // Simple ice-cream-van style jingle: "Greensleeves" opening notes
-    // "Greensleeves" - classic UK ice cream van tune
-    const notes = [
-      { freq: 440, dur: 0.3 }, { freq: 523, dur: 0.2 }, { freq: 587, dur: 0.3 },
-      { freq: 659, dur: 0.2 }, { freq: 622, dur: 0.15 }, { freq: 587, dur: 0.3 },
-      { freq: 494, dur: 0.45 }, { freq: 440, dur: 0.15 }, { freq: 392, dur: 0.3 },
-      { freq: 349, dur: 0.2 }, { freq: 392, dur: 0.15 }, { freq: 440, dur: 0.3 },
-      { freq: 494, dur: 0.45 }, { freq: 494, dur: 0.15 }, { freq: 523, dur: 0.3 },
-      { freq: 587, dur: 0.2 }, { freq: 659, dur: 0.15 }, { freq: 698, dur: 0.3 },
-      { freq: 659, dur: 0.2 }, { freq: 622, dur: 0.15 }, { freq: 587, dur: 0.3 },
-      { freq: 494, dur: 0.45 }, { freq: 440, dur: 0.15 }, { freq: 392, dur: 0.3 },
-      { freq: 349, dur: 0.2 }, { freq: 415, dur: 0.15 }, { freq: 440, dur: 0.6 },
+
+    // Greensleeves - full two-verse arrangement with harmony
+    // Each note: [melody_freq, harmony_freq, duration, volume]
+    const bpm = 160;
+    const beat = 60 / bpm;
+    const q = beat;        // quarter note
+    const dq = beat * 1.5; // dotted quarter
+    const e = beat * 0.5;  // eighth note
+    const h = beat * 2;    // half note
+    const dh = beat * 2.5; // dotted half
+
+    const verse = [
+      // "A-las my love"
+      [220, 329, dq], [261, 392, e], [311, 466, dq], [261, 392, e],
+      [293, 440, dq], [261, 392, e], [246, 369, dq], [220, 329, e],
+      // "you do me wrong"
+      [220, 329, dq], [196, 293, e], [220, 329, dq], [246, 369, e],
+      [261, 392, dh],
+      // "to cast me off"
+      [261, 392, dq], [293, 440, e], [349, 523, dq], [311, 466, e],
+      [329, 493, dq], [293, 440, e], [311, 466, dq], [261, 392, e],
+      // "discourteously"
+      [246, 369, dq], [220, 329, e], [196, 293, dq], [174, 261, e],
+      [220, 329, dh],
+      // "For I have loved"
+      [220, 329, dq], [261, 392, e], [311, 466, dq], [261, 392, e],
+      [293, 440, dq], [261, 392, e], [246, 369, dq], [220, 329, e],
+      // "you so long"
+      [220, 329, dq], [196, 293, e], [220, 329, dq], [246, 369, e],
+      [261, 392, dh],
+      // "Delighting in"
+      [329, 493, dq], [311, 466, e], [293, 440, dq], [261, 392, e],
+      [246, 369, dq], [220, 329, e], [233, 349, dq], [246, 369, e],
+      // "your company"
+      [261, 392, dh + q],
     ];
-    let t = ctx.currentTime + 0.05;
-    notes.forEach(({ freq, dur }) => {
+
+    const chorus = [
+      // "Greensleeves was"
+      [349, 523, dq], [311, 466, e], [329, 493, dq], [293, 440, e],
+      [311, 466, dq], [261, 392, e], [246, 369, dq], [220, 329, e],
+      // "all my joy"
+      [220, 329, dh + q],
+      // "Greensleeves was"
+      [349, 523, dq], [311, 466, e], [329, 493, dq], [293, 440, e],
+      [311, 466, dq], [261, 392, e], [220, 329, dh + q],
+      // "my delight"
+      [329, 493, dq], [311, 466, e], [293, 440, dq], [261, 392, e],
+      [246, 369, dq], [220, 329, e], [233, 349, dq], [246, 369, e],
+      [261, 392, dh + q],
+      // "Greensleeves was"
+      [349, 523, dq], [311, 466, e], [329, 493, dq], [293, 440, e],
+      [311, 466, dq], [261, 392, e], [246, 369, dq], [220, 329, e],
+      [220, 329, dq], [196, 293, e], [220, 329, dq], [246, 369, e],
+      // "heart of gold"
+      [261, 392, dh + q],
+      // "and who but my lady Greensleeves"
+      [329, 493, dq], [311, 466, e], [293, 440, dq], [261, 392, e],
+      [246, 369, dq], [220, 329, e], [233, 349, dq], [246, 369, e],
+      [261, 392, dh + q],
+    ];
+
+    const song = [...verse, ...chorus];
+
+    const playNote = (melodyFreq, harmFreq, duration, vol, startTime) => {
+      // Melody (square wave - classic van sound)
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.type = 'square';
-      osc.frequency.setValueAtTime(freq, t);
-      gain.gain.setValueAtTime(0.3, t);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
-      osc.start(t);
-      osc.stop(t + dur);
+      osc.frequency.setValueAtTime(melodyFreq, startTime);
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(vol * 0.28, startTime + 0.01);
+      gain.gain.setValueAtTime(vol * 0.22, startTime + duration * 0.7);
+      gain.gain.linearRampToValueAtTime(0, startTime + duration * 0.95);
+      osc.start(startTime);
+      osc.stop(startTime + duration);
+
+      // Harmony (sine wave - softer background)
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(harmFreq, startTime);
+      gain2.gain.setValueAtTime(0, startTime);
+      gain2.gain.linearRampToValueAtTime(vol * 0.1, startTime + 0.02);
+      gain2.gain.linearRampToValueAtTime(0, startTime + duration * 0.9);
+      osc2.start(startTime);
+      osc2.stop(startTime + duration);
+    };
+
+    let t = ctx.currentTime + 0.05;
+    song.forEach(([melody, harmony, dur]) => {
+      playNote(melody, harmony, dur * 0.92, 1, t);
       t += dur;
     });
   };
