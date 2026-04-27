@@ -42,7 +42,7 @@ export default function VanSetupForm({ user, onCreated }) {
       className="max-w-md mx-auto">
       
       <div className="text-center mb-8">
-        <div className="text-5xl mx-auto mb-4">🍦</div>
+        <div className="text-6xl mx-auto mb-4">🚐</div>
         <h2 className="font-heading text-2xl font-bold mb-1">Set Up Your Van</h2>
         <p className="text-muted-foreground text-sm hidden">Tell customers about your ice cream van</p>
       </div>
