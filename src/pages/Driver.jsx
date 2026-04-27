@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { Loader2, IceCream, Pencil, Camera, Trash2, MessageCircle, Home } from 'lucide-react';
+import { Loader2, IceCream, Pencil, Camera, Trash2, MessageCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import VanSetupForm from '../components/VanSetupForm';
@@ -82,8 +82,8 @@ export default function Driver() {
   const headerEl = (
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
       <div className="max-w-5xl mx-auto px-4 h-14 flex items-center gap-3">
-      <button onClick={() => navigate('/')} className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-muted transition-colors">
-        <Home className="w-5 h-5" />
+      <button onClick={() => navigate('/')} className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-muted transition-colors text-xl">
+        🏡
       </button>
         <span className="text-xl hidden md:inline">🚐</span>
         <h1 className="text-[hsl(var(--color-sky))] text-lg font-semibold flex-1">Driver Dashboard</h1>
