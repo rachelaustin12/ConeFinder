@@ -116,10 +116,10 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
         <DialogHeader>
          <DialogTitle className="text-[hsl(var(--color-sky))] text-xl font-thin tracking-tight flex items-center gap-2">
            <Star className="w-5 h-5 text-yellow-400" />
-           What's your scoop?
+           Give us the scoop
          </DialogTitle>
          <DialogDescription className="text-sm text-muted-foreground">
-           Yes please or brain freeze?
+           Is it yes please or brain freeze?
          </DialogDescription>
         </DialogHeader>
 
