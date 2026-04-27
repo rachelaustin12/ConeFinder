@@ -65,7 +65,7 @@ export default function VanMap({ vans, className = "" }) {
         {vans.filter((v) => v.is_active && v.latitude && v.longitude).map((van) =>
         <Marker key={van.id} position={[van.latitude, van.longitude]} icon={van.isSighting ? sightingIcon : vanIcon}>
             <Tooltip permanent direction="top" offset={[0, -38]} opacity={1} className="van-label">
-              <span style={{ fontWeight: 600, fontSize: '12px', whiteSpace: 'nowrap' }}>{van.name}</span>
+              <span style={{ fontWeight: 600, fontSize: '12px', whiteSpace: 'nowrap', color: '#0ea5e9' }}>{van.name}</span>
             </Tooltip>
             <Popup>
               <VanMarkerPopup van={van} />
