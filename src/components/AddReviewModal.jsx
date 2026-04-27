@@ -7,10 +7,10 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
-import { Star, Loader2, Camera, ChevronDown, Plus } from 'lucide-react';
+import { Star, Loader2, Camera, ChevronDown } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-function VanPickerDrawer({ vans, selectedVanId, onSelect, onAddNew }) {
+function VanPickerDrawer({ vans, selectedVanId, onSelect }) {
   const [open, setOpen] = useState(false);
   const selected = vans.find(v => v.id === selectedVanId);
 
@@ -45,11 +45,6 @@ function VanPickerDrawer({ vans, selectedVanId, onSelect, onAddNew }) {
                 {v.name}
               </button>
             ))}
-            <button
-              onClick={() => { onAddNew(); setOpen(false); }}
-              className="w-full text-left px-4 py-3 rounded-xl text-sm transition-colors bg-muted/50 hover:bg-muted/80 text-primary font-semibold flex items-center gap-2 border border-dashed border-primary/40">
-              <Plus className="w-4 h-4" /> Add a new van...
-            </button>
           </div>
         </DrawerContent>
       </Drawer>
@@ -59,8 +54,6 @@ function VanPickerDrawer({ vans, selectedVanId, onSelect, onAddNew }) {
 
 export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
   const [selectedVanId, setSelectedVanId] = useState('');
-  const [isAddingNew, setIsAddingNew] = useState(false);
-  const [newVanName, setNewVanName] = useState('');
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [reviewerName, setReviewerName] = useState('');
@@ -69,24 +62,12 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
   const isMobile = useIsMobile();
 
   const handleSubmit = async () => {
-    if (!isAddingNew && !selectedVanId) { toast.error('Please select a van'); return; }
-    if (isAddingNew && !newVanName.trim()) { toast.error('Please enter the van name'); return; }
+    if (!selectedVanId) { toast.error('Please select a van'); return; }
     if (!rating) { toast.error('Please give a rating'); return; }
 
+    // Optimistic: show loading immediately
     setLoading(true);
-
-    let vanId = selectedVanId;
-    let van = vans.find(v => v.id === selectedVanId);
-
-    if (isAddingNew) {
-      const newVan = await base44.entities.IceCreamVan.create({
-        name: newVanName.trim(),
-        driver_email: 'unknown@unknown.com',
-        is_active: false,
-      });
-      vanId = newVan.id;
-      van = newVan;
-    }
+    const van = vans.find(v => v.id === selectedVanId);
 
     let photo_url = null;
     if (photoFile) {
@@ -95,7 +76,7 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
     }
 
     await base44.entities.VanReview.create({
-      van_id: vanId,
+      van_id: selectedVanId,
       van_name: van.name,
       rating,
       comment: comment.trim() || null,
@@ -105,7 +86,7 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
 
     setLoading(false);
     toast.success('Review posted! Thanks 🍦');
-    setSelectedVanId(''); setIsAddingNew(false); setNewVanName(''); setRating(0); setComment(''); setReviewerName(''); setPhotoFile(null);
+    setSelectedVanId(''); setRating(0); setComment(''); setReviewerName(''); setPhotoFile(null);
     onClose();
     onReviewed();
   };
@@ -114,9 +95,9 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="rounded-3xl max-w-sm font-nunito">
         <DialogHeader>
-          <DialogTitle className="text-[hsl(var(--color-sky))] text-xl font-thin tracking-tight flex items-center gap-2">
+          <DialogTitle className="font-pacifico text-xl flex items-center gap-2">
             <Star className="w-5 h-5 text-yellow-400" />
-            Yes please or Brain freeze
+            Leave a Review
           </DialogTitle>
         </DialogHeader>
 
@@ -124,36 +105,16 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
           <div className="space-y-1.5">
             <Label className="text-sm font-bold">Which van?</Label>
             {isMobile ? (
-              <VanPickerDrawer
-                vans={vans}
-                selectedVanId={selectedVanId}
-                onSelect={(id) => { setSelectedVanId(id); setIsAddingNew(false); }}
-                onAddNew={() => { setIsAddingNew(true); setSelectedVanId(''); }} />
+              <VanPickerDrawer vans={vans} selectedVanId={selectedVanId} onSelect={setSelectedVanId} />
             ) : (
               <select
-                value={isAddingNew ? '__new__' : selectedVanId}
-                onChange={e => {
-                  if (e.target.value === '__new__') { setIsAddingNew(true); setSelectedVanId(''); }
-                  else { setIsAddingNew(false); setSelectedVanId(e.target.value); }
-                }}
+                value={selectedVanId}
+                onChange={e => setSelectedVanId(e.target.value)}
                 className="w-full px-3 py-2 border border-input rounded-xl bg-background text-sm"
               >
                 <option value="">Select a van...</option>
                 {vans.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
-                <option value="__new__">➕ Add a new van...</option>
               </select>
-            )}
-            {isAddingNew && (
-              <div className="space-y-1.5 mt-2">
-                <Input
-                  placeholder="e.g. Mr Whippy's"
-                  value={newVanName}
-                  onChange={e => setNewVanName(e.target.value)}
-                  className="rounded-xl"
-                  maxLength={60}
-                  autoFocus />
-                <p className="text-xs text-muted-foreground">This will add the van so others can find and review it too.</p>
-              </div>
             )}
           </div>
 
