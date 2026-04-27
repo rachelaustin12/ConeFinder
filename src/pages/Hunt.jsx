@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import VanMap from '../components/VanMap';
-import { useProximityAlerts } from '../hooks/useProximityAlerts';
 import VanCard from '../components/VanCard';
 import ReportSightingModal from '../components/ReportSightingModal';
 import AddReviewModal from '../components/AddReviewModal';
@@ -49,6 +48,36 @@ export default function Hunt() {
     };
   }, [pullStart, pullDelta, handleRefresh]);
 
+  const playJingle = () => {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // Simple ice-cream-van style jingle: "Greensleeves" opening notes
+    // "Greensleeves" - classic UK ice cream van tune
+    const notes = [
+    { freq: 440, dur: 0.3 }, { freq: 523, dur: 0.2 }, { freq: 587, dur: 0.3 },
+    { freq: 659, dur: 0.2 }, { freq: 622, dur: 0.15 }, { freq: 587, dur: 0.3 },
+    { freq: 494, dur: 0.45 }, { freq: 440, dur: 0.15 }, { freq: 392, dur: 0.3 },
+    { freq: 349, dur: 0.2 }, { freq: 392, dur: 0.15 }, { freq: 440, dur: 0.3 },
+    { freq: 494, dur: 0.45 }, { freq: 494, dur: 0.15 }, { freq: 523, dur: 0.3 },
+    { freq: 587, dur: 0.2 }, { freq: 659, dur: 0.15 }, { freq: 698, dur: 0.3 },
+    { freq: 659, dur: 0.2 }, { freq: 622, dur: 0.15 }, { freq: 587, dur: 0.3 },
+    { freq: 494, dur: 0.45 }, { freq: 440, dur: 0.15 }, { freq: 392, dur: 0.3 },
+    { freq: 349, dur: 0.2 }, { freq: 415, dur: 0.15 }, { freq: 440, dur: 0.6 }];
+
+    let t = ctx.currentTime + 0.05;
+    notes.forEach(({ freq, dur }) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(freq, t);
+      gain.gain.setValueAtTime(0.3, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      osc.start(t);
+      osc.stop(t + dur);
+      t += dur;
+    });
+  };
 
   const { data: vans = [], isLoading } = useQuery({
     queryKey: ['active-vans'],
@@ -92,8 +121,6 @@ export default function Hunt() {
     }
   }, []);
 
-  useProximityAlerts(vans, userPos);
-
   return (
     <div className="min-h-screen bg-background font-nunito">
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
@@ -114,7 +141,7 @@ export default function Hunt() {
           </Button>
           <Button
             size="sm"
-            onClick={() => setShowModal(true)} className="bg-[#1499d2] text-[hsl(var(--background))] px-3 text-base font-thin rounded-xl inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-8 gap-1.5 hover:bg-blue-900 active:bg-blue-900">
+            onClick={() => {playJingle();setShowModal(true);}} className="bg-[#1499d2] text-[hsl(var(--background))] px-3 text-base font-thin rounded-xl inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-8 gap-1.5 hover:bg-accent/90">
             
             
             <Plus className="w-4 h-4" />
@@ -166,7 +193,7 @@ export default function Hunt() {
             <p className="text-muted-foreground text-sm mb-4">
               Be the first to report a sighting!
             </p>
-            <Button onClick={() => setShowModal(true)} className="rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground">
+            <Button onClick={() => {playJingle();setShowModal(true);}} className="rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground">
               📍 I found a van!
             </Button>
           </motion.div> :
