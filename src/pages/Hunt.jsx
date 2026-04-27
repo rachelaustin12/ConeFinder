@@ -98,7 +98,7 @@ export default function Hunt() {
           <Link to="/" className="p-1.5 rounded-xl hover:bg-muted transition-colors text-xl">
             🏠
           </Link>
-          <span className="text-xl">👀</span>
+          <span className="text-xl">🗺️</span>
           <h1 className="bg-[hsl(var(--destructive-foreground))] text-[hsl(var(--color-sky))] text-xl font-thin flex-1"></h1>
           <Button
             size="sm"
