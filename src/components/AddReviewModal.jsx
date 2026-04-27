@@ -7,10 +7,10 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
-import { Star, Loader2, Camera, ChevronDown } from 'lucide-react';
+import { Star, Loader2, Camera, ChevronDown, Plus } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-function VanPickerDrawer({ vans, selectedVanId, onSelect }) {
+function VanPickerDrawer({ vans, selectedVanId, onSelect, onAddNew }) {
   const [open, setOpen] = useState(false);
   const selected = vans.find(v => v.id === selectedVanId);
 
@@ -45,6 +45,11 @@ function VanPickerDrawer({ vans, selectedVanId, onSelect }) {
                 {v.name}
               </button>
             ))}
+            <button
+              onClick={() => { onAddNew(); setOpen(false); }}
+              className="w-full text-left px-4 py-3 rounded-xl text-sm transition-colors bg-muted/50 hover:bg-muted/80 text-primary font-semibold flex items-center gap-2 border border-dashed border-primary/40">
+              <Plus className="w-4 h-4" /> Add a new van...
+            </button>
           </div>
         </DrawerContent>
       </Drawer>
@@ -54,6 +59,8 @@ function VanPickerDrawer({ vans, selectedVanId, onSelect }) {
 
 export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
   const [selectedVanId, setSelectedVanId] = useState('');
+  const [isAddingNew, setIsAddingNew] = useState(false);
+  const [newVanName, setNewVanName] = useState('');
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [reviewerName, setReviewerName] = useState('');
@@ -62,12 +69,24 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
   const isMobile = useIsMobile();
 
   const handleSubmit = async () => {
-    if (!selectedVanId) { toast.error('Please select a van'); return; }
+    if (!isAddingNew && !selectedVanId) { toast.error('Please select a van'); return; }
+    if (isAddingNew && !newVanName.trim()) { toast.error('Please enter the van name'); return; }
     if (!rating) { toast.error('Please give a rating'); return; }
 
-    // Optimistic: show loading immediately
     setLoading(true);
-    const van = vans.find(v => v.id === selectedVanId);
+
+    let vanId = selectedVanId;
+    let van = vans.find(v => v.id === selectedVanId);
+
+    if (isAddingNew) {
+      const newVan = await base44.entities.IceCreamVan.create({
+        name: newVanName.trim(),
+        driver_email: 'unknown@unknown.com',
+        is_active: false,
+      });
+      vanId = newVan.id;
+      van = newVan;
+    }
 
     let photo_url = null;
     if (photoFile) {
@@ -76,7 +95,7 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
     }
 
     await base44.entities.VanReview.create({
-      van_id: selectedVanId,
+      van_id: vanId,
       van_name: van.name,
       rating,
       comment: comment.trim() || null,
@@ -86,7 +105,7 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
 
     setLoading(false);
     toast.success('Review posted! Thanks 🍦');
-    setSelectedVanId(''); setRating(0); setComment(''); setReviewerName(''); setPhotoFile(null);
+    setSelectedVanId(''); setIsAddingNew(false); setNewVanName(''); setRating(0); setComment(''); setReviewerName(''); setPhotoFile(null);
     onClose();
     onReviewed();
   };
@@ -105,16 +124,36 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
           <div className="space-y-1.5">
             <Label className="text-sm font-bold">Which van?</Label>
             {isMobile ? (
-              <VanPickerDrawer vans={vans} selectedVanId={selectedVanId} onSelect={setSelectedVanId} />
+              <VanPickerDrawer
+                vans={vans}
+                selectedVanId={selectedVanId}
+                onSelect={(id) => { setSelectedVanId(id); setIsAddingNew(false); }}
+                onAddNew={() => { setIsAddingNew(true); setSelectedVanId(''); }} />
             ) : (
               <select
-                value={selectedVanId}
-                onChange={e => setSelectedVanId(e.target.value)}
+                value={isAddingNew ? '__new__' : selectedVanId}
+                onChange={e => {
+                  if (e.target.value === '__new__') { setIsAddingNew(true); setSelectedVanId(''); }
+                  else { setIsAddingNew(false); setSelectedVanId(e.target.value); }
+                }}
                 className="w-full px-3 py-2 border border-input rounded-xl bg-background text-sm"
               >
                 <option value="">Select a van...</option>
                 {vans.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
+                <option value="__new__">➕ Add a new van...</option>
               </select>
+            )}
+            {isAddingNew && (
+              <div className="space-y-1.5 mt-2">
+                <Input
+                  placeholder="e.g. Mr Whippy's"
+                  value={newVanName}
+                  onChange={e => setNewVanName(e.target.value)}
+                  className="rounded-xl"
+                  maxLength={60}
+                  autoFocus />
+                <p className="text-xs text-muted-foreground">This will add the van so others can find and review it too.</p>
+              </div>
             )}
           </div>
 
