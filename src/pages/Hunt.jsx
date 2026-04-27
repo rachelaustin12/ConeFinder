@@ -53,16 +53,16 @@ export default function Hunt() {
     // Simple ice-cream-van style jingle: "Greensleeves" opening notes
     // "Greensleeves" - classic UK ice cream van tune
     const notes = [
-      { freq: 440, dur: 0.3 }, { freq: 523, dur: 0.2 }, { freq: 587, dur: 0.3 },
-      { freq: 659, dur: 0.2 }, { freq: 622, dur: 0.15 }, { freq: 587, dur: 0.3 },
-      { freq: 494, dur: 0.45 }, { freq: 440, dur: 0.15 }, { freq: 392, dur: 0.3 },
-      { freq: 349, dur: 0.2 }, { freq: 392, dur: 0.15 }, { freq: 440, dur: 0.3 },
-      { freq: 494, dur: 0.45 }, { freq: 494, dur: 0.15 }, { freq: 523, dur: 0.3 },
-      { freq: 587, dur: 0.2 }, { freq: 659, dur: 0.15 }, { freq: 698, dur: 0.3 },
-      { freq: 659, dur: 0.2 }, { freq: 622, dur: 0.15 }, { freq: 587, dur: 0.3 },
-      { freq: 494, dur: 0.45 }, { freq: 440, dur: 0.15 }, { freq: 392, dur: 0.3 },
-      { freq: 349, dur: 0.2 }, { freq: 415, dur: 0.15 }, { freq: 440, dur: 0.6 },
-    ];
+    { freq: 440, dur: 0.3 }, { freq: 523, dur: 0.2 }, { freq: 587, dur: 0.3 },
+    { freq: 659, dur: 0.2 }, { freq: 622, dur: 0.15 }, { freq: 587, dur: 0.3 },
+    { freq: 494, dur: 0.45 }, { freq: 440, dur: 0.15 }, { freq: 392, dur: 0.3 },
+    { freq: 349, dur: 0.2 }, { freq: 392, dur: 0.15 }, { freq: 440, dur: 0.3 },
+    { freq: 494, dur: 0.45 }, { freq: 494, dur: 0.15 }, { freq: 523, dur: 0.3 },
+    { freq: 587, dur: 0.2 }, { freq: 659, dur: 0.15 }, { freq: 698, dur: 0.3 },
+    { freq: 659, dur: 0.2 }, { freq: 622, dur: 0.15 }, { freq: 587, dur: 0.3 },
+    { freq: 494, dur: 0.45 }, { freq: 440, dur: 0.15 }, { freq: 392, dur: 0.3 },
+    { freq: 349, dur: 0.2 }, { freq: 415, dur: 0.15 }, { freq: 440, dur: 0.6 }];
+
     let t = ctx.currentTime + 0.05;
     notes.forEach(({ freq, dur }) => {
       const osc = ctx.createOscillator();
@@ -82,7 +82,7 @@ export default function Hunt() {
   const { data: vans = [], isLoading } = useQuery({
     queryKey: ['active-vans'],
     queryFn: () => base44.entities.IceCreamVan.filter({ is_active: true }),
-    refetchInterval: 15000,
+    refetchInterval: 15000
   });
 
   const { data: sightings = [] } = useQuery({
@@ -90,25 +90,25 @@ export default function Hunt() {
     queryFn: async () => {
       const all = await base44.entities.VanSighting.list('-created_date', 100);
       const now = new Date();
-      return all.filter(s => !s.expires_at || new Date(s.expires_at) > now);
+      return all.filter((s) => !s.expires_at || new Date(s.expires_at) > now);
     },
-    refetchInterval: 30000,
+    refetchInterval: 30000
   });
 
   // Merge sightings as pseudo-vans for the map (vans not already sharing live location)
-  const sightingVans = sightings
-    .filter(s => !vans.find(v => v.id === s.van_id))
-    .map(s => ({
-      id: `sighting-${s.id}`,
-      name: s.van_name,
-      latitude: s.latitude,
-      longitude: s.longitude,
-      is_active: true,
-      isSighting: true,
-      note: s.note,
-      reporter_name: s.reporter_name,
-      last_location_update: s.created_date,
-    }));
+  const sightingVans = sightings.
+  filter((s) => !vans.find((v) => v.id === s.van_id)).
+  map((s) => ({
+    id: `sighting-${s.id}`,
+    name: s.van_name,
+    latitude: s.latitude,
+    longitude: s.longitude,
+    is_active: true,
+    isSighting: true,
+    note: s.note,
+    reporter_name: s.reporter_name,
+    last_location_update: s.created_date
+  }));
 
   const allVans = [...vans, ...sightingVans];
 
@@ -129,21 +129,21 @@ export default function Hunt() {
             <Home className="w-5 h-5 text-muted-foreground" />
           </Link>
           <span className="text-xl">🔍</span>
-          <h1 className="font-pacifico text-xl text-foreground flex-1">Hunt for Ice Cream</h1>
+          <h1 className="text-foreground text-xl font-thin flex-1">Hunt for Ice Cream</h1>
           <Button
             size="sm"
             variant="outline"
             onClick={() => setShowReviewModal(true)}
-            className="rounded-xl gap-1.5"
-          >
+            className="rounded-xl gap-1.5">
+            
             <Star className="w-4 h-4" />
             Review
           </Button>
           <Button
             size="sm"
-            onClick={() => { playJingle(); setShowModal(true); }}
-            className="rounded-xl gap-1.5 bg-accent hover:bg-accent/90 text-accent-foreground"
-          >
+            onClick={() => {playJingle();setShowModal(true);}}
+            className="rounded-xl gap-1.5 bg-accent hover:bg-accent/90 text-accent-foreground">
+            
             <Plus className="w-4 h-4" />
             I found one!
           </Button>
@@ -151,73 +151,73 @@ export default function Hunt() {
       </header>
 
       {/* Pull-to-refresh indicator */}
-      {(pullDelta > 10 || refreshing) && (
-        <div className="fixed top-14 left-0 right-0 z-40 flex justify-center pointer-events-none">
+      {(pullDelta > 10 || refreshing) &&
+      <div className="fixed top-14 left-0 right-0 z-40 flex justify-center pointer-events-none">
           <div className={`mt-2 px-4 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-semibold shadow transition-all ${refreshing ? 'opacity-100' : 'opacity-70'}`}>
             {refreshing ? '↻ Refreshing...' : pullDelta > 60 ? '↑ Release to refresh' : '↓ Pull to refresh'}
           </div>
         </div>
-      )}
+      }
 
       <main className="max-w-5xl mx-auto px-4 py-6 pb-20">
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.05 }}
-        >
+          transition={{ delay: 0.05 }}>
+          
           <VanMap vans={allVans} className="h-[50vh] mb-6" />
         </motion.div>
 
         <div className="mb-4 flex items-center gap-2">
           <IceCream className="w-5 h-5 text-primary" />
-          <h2 className="font-pacifico text-xl">
+          <h2 className="text-xl font-thin">
             Active Vans
-            {allVans.length > 0 && (
-              <span className="text-muted-foreground font-inter text-sm font-normal ml-2">({allVans.length})</span>
-            )}
+            {allVans.length > 0 &&
+            <span className="text-muted-foreground font-inter text-sm font-normal ml-2">({allVans.length})</span>
+            }
           </h2>
         </div>
 
-        {isLoading ? (
-          <div className="flex items-center justify-center py-12">
+        {isLoading ?
+        <div className="flex items-center justify-center py-12">
             <Loader2 className="w-6 h-6 animate-spin text-primary" />
-          </div>
-        ) : allVans.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-16 px-4"
-          >
+          </div> :
+        allVans.length === 0 ?
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center py-16 px-4">
+          
             <div className="text-5xl mb-4">🍨</div>
             <h3 className="font-pacifico text-xl mb-1">No vans spotted yet</h3>
             <p className="text-muted-foreground text-sm mb-4">
               Be the first to report a sighting!
             </p>
-            <Button onClick={() => { playJingle(); setShowModal(true); }} className="rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground">
+            <Button onClick={() => {playJingle();setShowModal(true);}} className="rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground">
               📍 I found a van!
             </Button>
-          </motion.div>
-        ) : (
-          <div className="grid gap-3 sm:grid-cols-2">
-            {allVans.map(van => (
-              <VanCard key={van.id} van={van} userPosition={userPos} />
-            ))}
+          </motion.div> :
+
+        <div className="grid gap-3 sm:grid-cols-2">
+            {allVans.map((van) =>
+          <VanCard key={van.id} van={van} userPosition={userPos} />
+          )}
           </div>
-        )}
+        }
       </main>
 
       <ReportSightingModal
         open={showModal}
         onClose={() => setShowModal(false)}
         vans={vans}
-        onReported={() => queryClient.invalidateQueries({ queryKey: ['van-sightings'] })}
-      />
+        onReported={() => queryClient.invalidateQueries({ queryKey: ['van-sightings'] })} />
+      
       <AddReviewModal
         open={showReviewModal}
         onClose={() => setShowReviewModal(false)}
         vans={vans}
-        onReviewed={() => {}}
-      />
-    </div>
-  );
+        onReviewed={() => {}} />
+      
+    </div>);
+
 }

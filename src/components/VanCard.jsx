@@ -16,20 +16,20 @@ function getDistance(lat1, lon1, lat2, lon2) {
 
 export default function VanCard({ van, userPosition }) {
   const [showMessage, setShowMessage] = useState(false);
-  const lastUpdate = van.last_location_update
-    ? formatDistanceToNow(new Date(van.last_location_update), { addSuffix: true })
-    : null;
+  const lastUpdate = van.last_location_update ?
+  formatDistanceToNow(new Date(van.last_location_update), { addSuffix: true }) :
+  null;
 
-  const distance = userPosition && van.latitude && van.longitude
-    ? getDistance(userPosition[0], userPosition[1], van.latitude, van.longitude)
-    : null;
+  const distance = userPosition && van.latitude && van.longitude ?
+  getDistance(userPosition[0], userPosition[1], van.latitude, van.longitude) :
+  null;
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
+      transition={{ duration: 0.3 }}>
+      
       <Card className="overflow-hidden hover:shadow-md transition-shadow border-border/60 bg-card">
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
@@ -38,56 +38,56 @@ export default function VanCard({ van, userPosition }) {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between gap-2">
-              <h3 className="font-heading font-semibold text-sm truncate">{van.name}</h3>
+              <h3 className="text-sm font-thin truncate">{van.name}</h3>
               <div className={`w-2 h-2 rounded-full shrink-0 animate-pulse ${van.isSighting ? 'bg-accent' : 'bg-green-400'}`} />
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
-              {van.isSighting
-                ? `Spotted by ${van.reporter_name || 'a hunter'}`
-                : (van.driver_name || 'Anonymous Driver')}
+              {van.isSighting ?
+                `Spotted by ${van.reporter_name || 'a hunter'}` :
+                van.driver_name || 'Anonymous Driver'}
             </p>
-            {van.note && (
+            {van.note &&
               <p className="text-xs text-muted-foreground mt-0.5">"{van.note}"</p>
-            )}
-            {van.specialties && (
-                <div className="flex flex-wrap gap-1 mt-2">
-                  {van.specialties.split(',').slice(0, 3).map((s, i) => (
-                    <Badge key={i} variant="secondary" className="text-[10px] py-0 px-1.5 font-body">
+              }
+            {van.specialties &&
+              <div className="flex flex-wrap gap-1 mt-2">
+                  {van.specialties.split(',').slice(0, 3).map((s, i) =>
+                <Badge key={i} variant="secondary" className="text-[10px] py-0 px-1.5 font-body">
                       {s.trim()}
                     </Badge>
-                  ))}
+                )}
                 </div>
-              )}
+              }
               <div className="flex items-center justify-between mt-2">
                 <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                  {distance !== null && (
-                    <span className="flex items-center gap-1">
+                  {distance !== null &&
+                  <span className="flex items-center gap-1">
                       <Navigation className="w-3 h-3" />
                       {distance < 1 ? `${(distance * 1000).toFixed(0)}m` : `${distance.toFixed(1)}km`}
                     </span>
-                  )}
-                  {lastUpdate && (
-                    <span className="flex items-center gap-1">
+                  }
+                  {lastUpdate &&
+                  <span className="flex items-center gap-1">
                       <Clock className="w-3 h-3" />
                       {lastUpdate}
                     </span>
-                  )}
+                  }
                 </div>
-                {!van.isSighting && van.messages_enabled !== false && (
-                  <button
-                    onClick={() => setShowMessage(true)}
-                    className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 font-semibold transition-colors"
-                  >
+                {!van.isSighting && van.messages_enabled !== false &&
+                <button
+                  onClick={() => setShowMessage(true)}
+                  className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 font-semibold transition-colors">
+                  
                     <MessageCircle className="w-3.5 h-3.5" />
                     Message
                   </button>
-                )}
+                }
               </div>
             </div>
           </div>
         </CardContent>
       </Card>
       <MessageVanModal open={showMessage} onClose={() => setShowMessage(false)} van={van} />
-    </motion.div>
-  );
+    </motion.div>);
+
 }
