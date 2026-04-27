@@ -15,7 +15,7 @@ export default function Home() {
         
         <div className="text-7xl mb-4 drop-shadow-md">🍦</div>
         <h1 className="font-nunito font-bold text-4xl sm:text-5xl mb-3" style={{ color: '#0ea5e9' }}>
-          What's the Scoop?
+          Cone Finder
         </h1>
         
 
