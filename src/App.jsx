@@ -8,6 +8,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Home from './pages/Home';
 import Find from './pages/Find';
 import Driver from './pages/Driver';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import BottomNav from './components/BottomNav';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect } from 'react';
@@ -27,6 +28,7 @@ const AnimatedRoutes = () => {
           <Route path="/" element={<Home />} />
           <Route path="/find" element={<Find />} />
           <Route path="/driver" element={<Driver />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </motion.div>

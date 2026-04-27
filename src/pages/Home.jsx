@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 export default function Home() {
@@ -57,6 +57,12 @@ export default function Home() {
           </motion.button>
         </div>
       </motion.div>
+
+      <footer className="mt-12 py-6 text-center border-t border-border/20">
+        <Link to="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+          Privacy Policy
+        </Link>
+      </footer>
     </div>);
 
 }
