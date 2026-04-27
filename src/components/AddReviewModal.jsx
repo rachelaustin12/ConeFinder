@@ -93,7 +93,7 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="rounded-3xl max-w-sm">
+      <DialogContent className="rounded-3xl max-w-sm font-nunito">
         <DialogHeader>
           <DialogTitle className="font-pacifico text-xl flex items-center gap-2">
             <Star className="w-5 h-5 text-yellow-400" />
