@@ -52,7 +52,7 @@ export default function VanCard({ van, userPosition }) {
             {van.specialties &&
               <div className="flex flex-wrap gap-1 mt-2">
                   {van.specialties.split(',').slice(0, 3).map((s, i) =>
-                <Badge key={i} variant="secondary" className="bg-[hsl(var(--destructive-foreground))] text-[10px] px-1.5 py-0 font-body opacity-100 rounded-md inline-flex items-center border transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-secondary/80">
+                <Badge key={i} variant="secondary" className="bg-[hsl(var(--input))] text-[10px] px-1.5 py-0 font-body opacity-100 rounded-md inline-flex items-center border transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-secondary/80">
                       {s.trim()}
                     </Badge>
                 )}
