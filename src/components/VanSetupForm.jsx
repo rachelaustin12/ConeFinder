@@ -28,7 +28,7 @@ export default function VanSetupForm({ user, onCreated }) {
       driver_email: user.email,
       specialties: specialties.trim(),
       is_active: false,
-      messages_enabled: messagesEnabled,
+      messages_enabled: messagesEnabled
     });
     setSaving(false);
     toast.success("Van created! You can now start sharing your location.");
@@ -39,8 +39,8 @@ export default function VanSetupForm({ user, onCreated }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-md mx-auto"
-    >
+      className="max-w-md mx-auto">
+      
       <div className="text-center mb-8">
         <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
           <Truck className="w-8 h-8 text-primary" />
@@ -56,8 +56,8 @@ export default function VanSetupForm({ user, onCreated }) {
             placeholder="e.g. Mr. Whippy's Van"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="rounded-xl"
-          />
+            className="rounded-xl" />
+          
         </div>
         <div className="space-y-2">
           <Label className="font-body font-semibold text-sm">Your Name</Label>
@@ -65,17 +65,17 @@ export default function VanSetupForm({ user, onCreated }) {
             placeholder="e.g. John"
             value={driverName}
             onChange={(e) => setDriverName(e.target.value)}
-            className="rounded-xl"
-          />
+            className="rounded-xl" />
+          
         </div>
         <div className="space-y-2">
-          <Label className="font-body font-semibold text-sm">Time to sell yourself...</Label>
+          <Label className="font-body font-semibold text-sm">Specialties</Label>
           <Textarea
             placeholder="e.g. Soft serve, Gelato, Popsicles, Milkshakes"
             value={specialties}
             onChange={(e) => setSpecialties(e.target.value)}
-            className="rounded-xl resize-none h-20"
-          />
+            className="rounded-xl resize-none h-20" />
+          
           <p className="text-xs text-muted-foreground">Separate with commas</p>
         </div>
         <div className="flex items-center justify-between p-3 rounded-xl border border-border bg-muted/30">
@@ -83,14 +83,14 @@ export default function VanSetupForm({ user, onCreated }) {
             <MessageCircle className="w-4 h-4 text-primary" />
             <div>
               <p className="text-sm font-semibold">Allow visit requests</p>
-              <p className="text-xs text-muted-foreground">Hunters can send you messages</p>
+              <p className="text-xs text-muted-foreground">Fc send you messages</p>
             </div>
           </div>
           <button
             type="button"
-            onClick={() => setMessagesEnabled(v => !v)}
-            className={`relative w-11 h-6 rounded-full transition-colors ${messagesEnabled ? 'bg-primary' : 'bg-muted-foreground/30'}`}
-          >
+            onClick={() => setMessagesEnabled((v) => !v)}
+            className={`relative w-11 h-6 rounded-full transition-colors ${messagesEnabled ? 'bg-primary' : 'bg-muted-foreground/30'}`}>
+            
             <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${messagesEnabled ? 'translate-x-5' : 'translate-x-0'}`} />
           </button>
         </div>
@@ -99,6 +99,6 @@ export default function VanSetupForm({ user, onCreated }) {
           Create My Van
         </Button>
       </form>
-    </motion.div>
-  );
+    </motion.div>);
+
 }
