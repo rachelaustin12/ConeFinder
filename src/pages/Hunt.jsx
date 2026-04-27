@@ -129,7 +129,7 @@ export default function Hunt() {
             <Home className="w-5 h-5 text-muted-foreground" />
           </Link>
           <span className="text-xl">🔍</span>
-          <h1 className="text-foreground text-xl font-thin flex-1">Hunt for Ice Cream</h1>
+          <h1 className="bg-[hsl(var(--destructive-foreground))] text-[hsl(var(--accent))] text-xl font-thin flex-1">Hunt for Ice Cream</h1>
           <Button
             size="sm"
             variant="outline"
