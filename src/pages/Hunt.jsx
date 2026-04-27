@@ -133,7 +133,7 @@ export default function Hunt() {
           <Button
             size="sm"
             variant="outline"
-            onClick={() => setShowReviewModal(true)} className="bg-transparent text-[hsl(var(--secondary))] px-3 text-lg font-thin rounded-xl inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input shadow-sm hover:bg-accent hover:text-accent-foreground h-8 gap-1.5">
+            onClick={() => setShowReviewModal(true)} className="bg-[hsl(var(--border))] text-[hsl(var(--secondary))] px-3 text-lg font-thin rounded-xl inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input shadow-sm hover:bg-accent hover:text-accent-foreground h-8 gap-1.5">
             
             
             <Star className="w-4 h-4" />
