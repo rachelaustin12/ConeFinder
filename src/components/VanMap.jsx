@@ -26,15 +26,6 @@ const userIcon = new L.DivIcon({
   className: ''
 });
 
-function FlyToUser({ position }) {
-  const map = useMap();
-  useEffect(() => {
-    if (position && !isNaN(position[0]) && !isNaN(position[1])) {
-      map.flyTo(position, 14, { duration: 1.5 });
-    }
-  }, [position, map]);
-  return null;
-}
 
 function MyLocationButton({ userPos }) {
   const map = useMap();
@@ -87,7 +78,7 @@ export default function VanMap({ vans, className = "" }) {
           subdomains="abcd"
           maxZoom={20} />
         
-        {userPos && <FlyToUser position={userPos} />}
+
         <MyLocationButton userPos={userPos} />
         {userPos && <Marker position={userPos} icon={userIcon} />}
         {vans.filter((v) => v.is_active && v.latitude && v.longitude && !isNaN(v.latitude) && !isNaN(v.longitude)).map((van) =>
