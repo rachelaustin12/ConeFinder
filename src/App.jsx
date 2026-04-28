@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
@@ -10,29 +10,78 @@ import Find from './pages/Find';
 import Driver from './pages/Driver';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import BottomNav from './components/BottomNav';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 
-const AnimatedRoutes = () => {
+// Tab order defines direction of slide animations
+const TAB_PATHS = ['/', '/find', '/driver'];
+
+const tabIndex = (path) => {
+  const idx = TAB_PATHS.indexOf(path);
+  return idx === -1 ? null : idx;
+};
+
+// Keep-alive tab stack: all tab pages stay mounted, only shown/hidden
+const TabStack = () => {
   const location = useLocation();
+  const prevPathRef = useRef(location.pathname);
+  const [direction, setDirection] = useState(0); // -1 left, 0 none, 1 right
+
+  useEffect(() => {
+    const prev = tabIndex(prevPathRef.current);
+    const next = tabIndex(location.pathname);
+    if (prev !== null && next !== null) {
+      setDirection(next > prev ? 1 : -1);
+    } else {
+      setDirection(0);
+    }
+    prevPathRef.current = location.pathname;
+  }, [location.pathname]);
+
+  const isTab = TAB_PATHS.includes(location.pathname);
+
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={location.pathname}
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -20 }}
-        transition={{ duration: 0.2 }}
-      >
-        <Routes location={location}>
-          <Route path="/" element={<Home />} />
-          <Route path="/find" element={<Find />} />
-          <Route path="/driver" element={<Driver />} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </motion.div>
-    </AnimatePresence>
+    <>
+      {/* Tab pages: always mounted, visually hidden when not active */}
+      {TAB_PATHS.map((path) => {
+        const active = location.pathname === path;
+        return (
+          <div
+            key={path}
+            style={{
+              position: active ? 'relative' : 'fixed',
+              inset: active ? 'auto' : 0,
+              visibility: active ? 'visible' : 'hidden',
+              pointerEvents: active ? 'auto' : 'none',
+              zIndex: active ? 1 : 0,
+            }}
+          >
+            {path === '/' && <Home />}
+            {path === '/find' && <Find />}
+            {path === '/driver' && <Driver />}
+          </div>
+        );
+      })}
+
+      {/* Non-tab routes render normally with a simple fade */}
+      {!isTab && (
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0, x: direction * 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -direction * 40 }}
+            transition={{ duration: 0.22, ease: [0.25, 0.46, 0.45, 0.94] }}
+            style={{ position: 'relative', zIndex: 2 }}
+          >
+            <Routes location={location}>
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </motion.div>
+        </AnimatePresence>
+      )}
+    </>
   );
 };
 
@@ -62,7 +111,7 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <>
-      <AnimatedRoutes />
+      <TabStack />
       <BottomNav />
     </>
   );

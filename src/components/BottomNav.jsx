@@ -1,37 +1,15 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Search, Truck, Home } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 
 export default function BottomNav() {
   const location = useLocation();
   const isMobile = useIsMobile();
-  const scrollPositions = useRef({});
-  const prevPath = useRef(location.pathname);
 
-  const handleTabClick = (to) => {
-    // Save current scroll before switching
-    scrollPositions.current[location.pathname] = window.scrollY;
-    
-    // If clicking the active tab, scroll to top
-    if (location.pathname === to) {
-      window.scrollTo(0, 0);
-    }
-  };
-
-  useEffect(() => {
-    // Restore scroll position when entering a route
-    const savedScroll = scrollPositions.current[location.pathname];
-    if (typeof savedScroll === 'number' && savedScroll > 0) {
-      requestAnimationFrame(() => {
-        window.scrollTo(0, savedScroll);
-      });
-    }
-
-    prevPath.current = location.pathname;
-  }, [location.pathname]);
-
-  if (!isMobile || location.pathname === '/') return null;
+  // Always show on tab pages on mobile
+  const TAB_PATHS = ['/', '/find', '/driver'];
+  if (!isMobile || !TAB_PATHS.includes(location.pathname)) return null;
 
   const links = [
     { to: '/', label: 'Home', icon: Home },
@@ -53,15 +31,27 @@ export default function BottomNav() {
             onClick={(e) => {
               if (active) {
                 e.preventDefault();
-                handleTabClick(to);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
               }
             }}
-            className={`flex-1 flex flex-col items-center justify-center min-h-[44px] gap-0.5 text-xs font-semibold transition-colors ${
+            className={`flex-1 flex flex-col items-center justify-center min-h-[56px] gap-0.5 text-xs font-semibold transition-colors relative ${
               active ? 'text-primary' : 'text-muted-foreground'
             }`}
           >
-            <Icon className="w-5 h-5" />
-            {label}
+            {active && (
+              <motion.div
+                layoutId="tab-indicator"
+                className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-primary"
+                transition={{ type: 'spring', stiffness: 400, damping: 35 }}
+              />
+            )}
+            <motion.div
+              animate={{ scale: active ? 1.15 : 1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+            >
+              <Icon className="w-5 h-5" />
+            </motion.div>
+            <span className={active ? 'opacity-100' : 'opacity-60'}>{label}</span>
           </Link>
         );
       })}
