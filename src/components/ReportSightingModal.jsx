@@ -1,56 +1,11 @@
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
-import { Loader2, ChevronDown, Plus } from 'lucide-react';
-import { useIsMobile } from '@/hooks/use-mobile';
-
-function VanPickerDrawer({ vans, selectedVanId, onSelect, onAddNew }) {
-  const [open, setOpen] = useState(false);
-  const selected = vans.find((v) => v.id === selectedVanId);
-
-  return (
-    <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="w-full flex items-center justify-between px-3 py-2 border border-input rounded-xl bg-background text-sm text-left hover:bg-muted/40 transition-colors">
-        <span className={selected ? 'text-foreground' : 'text-muted-foreground'}>
-          {selected ? selected.name : 'Select a van...'}
-        </span>
-        <ChevronDown className="w-4 h-4 text-muted-foreground" />
-      </button>
-      <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>Which van did you spot?</DrawerTitle>
-          </DrawerHeader>
-          <div className="px-4 pb-8 space-y-2">
-            {vans.map((v) =>
-              <button
-                key={v.id}
-                onClick={() => { onSelect(v.id); setOpen(false); }}
-                className={`w-full text-left px-4 py-3 rounded-xl font-semibold text-sm transition-colors ${
-                  selectedVanId === v.id ? 'bg-primary text-primary-foreground' : 'bg-muted hover:bg-muted/80'
-                }`}>
-                {v.name}
-              </button>
-            )}
-            <button
-              onClick={() => { onAddNew(); setOpen(false); }}
-              className="w-full text-left px-4 py-3 rounded-xl text-sm transition-colors bg-muted/50 hover:bg-muted/80 text-primary font-semibold flex items-center gap-2 border border-dashed border-primary/40">
-              <Plus className="w-4 h-4" /> Add a new van...
-            </button>
-          </div>
-        </DrawerContent>
-      </Drawer>
-    </>
-  );
-}
+import { Loader2, Plus } from 'lucide-react';
 
 export default function ReportSightingModal({ open, onClose, vans, onReported }) {
   const [selectedVanId, setSelectedVanId] = useState('');
@@ -59,7 +14,6 @@ export default function ReportSightingModal({ open, onClose, vans, onReported })
   const [note, setNote] = useState('');
   const [reporterName, setReporterName] = useState('');
   const [loading, setLoading] = useState(false);
-  const isMobile = useIsMobile();
 
   const reset = () => {
     setSelectedVanId('');
@@ -119,13 +73,7 @@ export default function ReportSightingModal({ open, onClose, vans, onReported })
     );
   };
 
-  const vanSelector = isMobile ? (
-    <VanPickerDrawer
-      vans={vans}
-      selectedVanId={selectedVanId}
-      onSelect={(id) => { setSelectedVanId(id); setIsAddingNew(false); }}
-      onAddNew={() => setIsAddingNew(true)} />
-  ) : (
+  const vanSelector = (
     <select
       value={isAddingNew ? '__new__' : selectedVanId}
       onChange={(e) => {
