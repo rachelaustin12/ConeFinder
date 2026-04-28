@@ -29,7 +29,7 @@ const userIcon = new L.DivIcon({
 function FlyToUser({ position }) {
   const map = useMap();
   useEffect(() => {
-    if (position) {
+    if (position && !isNaN(position[0]) && !isNaN(position[1])) {
       map.flyTo(position, 14, { duration: 1.5 });
     }
   }, [position, map]);
