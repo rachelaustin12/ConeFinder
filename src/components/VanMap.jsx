@@ -87,10 +87,10 @@ export default function VanMap({ vans, className = "" }) {
           subdomains="abcd"
           maxZoom={20} />
         
-        <FlyToUser position={userPos} />
+        {userPos && <FlyToUser position={userPos} />}
         <MyLocationButton userPos={userPos} />
         {userPos && <Marker position={userPos} icon={userIcon} />}
-        {vans.filter((v) => v.is_active && v.latitude && v.longitude).map((van) =>
+        {vans.filter((v) => v.is_active && v.latitude && v.longitude && !isNaN(v.latitude) && !isNaN(v.longitude)).map((van) =>
         <Marker key={van.id} position={[van.latitude, van.longitude]} icon={van.isSighting ? sightingIcon : vanIcon}>
             <Tooltip permanent direction="top" offset={[0, -38]} opacity={1} className="van-label">
               <span style={{ fontWeight: 600, fontSize: '12px', whiteSpace: 'nowrap', color: '#0ea5e9' }}>{van.name}</span>
