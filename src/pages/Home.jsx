@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import HowItWorksModal from '../components/HowItWorksModal';
+import SettingsModal from '../components/SettingsModal';
+import { Settings } from 'lucide-react';
 
 export default function Home() {
   const navigate = useNavigate();
   const [showHowItWorks, setShowHowItWorks] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem('cone_finder_onboarded')) {
@@ -15,7 +18,14 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4" style={{ background: 'linear-gradient(135deg, #e0f7fa 0%, #fff9c4 50%, #fce4ec 100%)' }}>
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 relative" style={{ background: 'linear-gradient(135deg, #e0f7fa 0%, #fff9c4 50%, #fce4ec 100%)' }}>
+      <button
+        onClick={() => setShowSettings(true)}
+        className="absolute top-4 right-4 p-2 rounded-full bg-white/60 hover:bg-white/90 transition-colors shadow-sm"
+        style={{ marginTop: 'env(safe-area-inset-top)' }}
+      >
+        <Settings className="w-5 h-5 text-muted-foreground" />
+      </button>
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
@@ -68,6 +78,7 @@ export default function Home() {
       </motion.div>
 
       <HowItWorksModal open={showHowItWorks} onClose={() => setShowHowItWorks(false)} />
+      <SettingsModal open={showSettings} onClose={() => setShowSettings(false)} onShowHowItWorks={() => setShowHowItWorks(true)} />
 
       <footer className="mt-12 py-6 text-center border-t border-border/20">
         <Link to="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
