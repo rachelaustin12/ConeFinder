@@ -1,54 +1,62 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
 import { Loader2, ChevronDown, Plus } from 'lucide-react';
-import { useIsMobile } from '@/hooks/use-mobile';
 
-function VanPickerDrawer({ vans, selectedVanId, onSelect, onAddNew }) {
+function VanPicker({ vans, selectedVanId, onSelect, onAddNew }) {
   const [open, setOpen] = useState(false);
   const selected = vans.find((v) => v.id === selectedVanId);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    if (open) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [open]);
 
   return (
-    <>
+    <div className="relative" ref={ref}>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => setOpen((o) => !o)}
         className="w-full flex items-center justify-between px-3 py-2 border border-input rounded-xl bg-background text-sm text-left hover:bg-muted/40 transition-colors">
         <span className={selected ? 'text-foreground' : 'text-muted-foreground'}>
           {selected ? selected.name : 'Select a van...'}
         </span>
-        <ChevronDown className="w-4 h-4 text-muted-foreground" />
+        <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
-      <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>Which van did you spot?</DrawerTitle>
-          </DrawerHeader>
-          <div className="px-4 pb-8 space-y-2">
-            {vans.map((v) =>
-              <button
-                key={v.id}
-                onClick={() => { onSelect(v.id); setOpen(false); }}
-                className={`w-full text-left px-4 py-3 rounded-xl font-semibold text-sm transition-colors ${
-                  selectedVanId === v.id ? 'bg-primary text-primary-foreground' : 'bg-muted hover:bg-muted/80'
-                }`}>
-                {v.name}
-              </button>
-            )}
+
+      {open && (
+        <div className="absolute z-[9999] top-full mt-1 left-0 right-0 bg-background border border-input rounded-xl shadow-lg overflow-hidden max-h-56 overflow-y-auto">
+          {vans.length === 0 && (
+            <div className="px-4 py-3 text-sm text-muted-foreground">No vans registered yet</div>
+          )}
+          {vans.map((v) => (
             <button
-              onClick={() => { onAddNew(); setOpen(false); }}
-              className="w-full text-left px-4 py-3 rounded-xl text-sm transition-colors bg-muted/50 hover:bg-muted/80 text-primary font-semibold flex items-center gap-2 border border-dashed border-primary/40">
-              <Plus className="w-4 h-4" /> Add a new van...
+              key={v.id}
+              type="button"
+              onClick={() => { onSelect(v.id); setOpen(false); }}
+              className={`w-full text-left px-4 py-3 text-sm transition-colors hover:bg-muted ${
+                selectedVanId === v.id ? 'bg-primary/10 text-primary font-semibold' : ''
+              }`}>
+              {v.name}
             </button>
-          </div>
-        </DrawerContent>
-      </Drawer>
-    </>
+          ))}
+          <button
+            type="button"
+            onClick={() => { onAddNew(); setOpen(false); }}
+            className="w-full text-left px-4 py-3 text-sm transition-colors hover:bg-muted text-primary font-semibold flex items-center gap-2 border-t border-input">
+            <Plus className="w-4 h-4" /> Add a new van...
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -59,7 +67,6 @@ export default function ReportSightingModal({ open, onClose, vans, onReported })
   const [note, setNote] = useState('');
   const [reporterName, setReporterName] = useState('');
   const [loading, setLoading] = useState(false);
-  const isMobile = useIsMobile();
 
   const reset = () => {
     setSelectedVanId('');
@@ -111,32 +118,26 @@ export default function ReportSightingModal({ open, onClose, vans, onReported })
         onClose();
         onReported();
       },
-      () => {
+      (err) => {
         setLoading(false);
-        toast.error('Could not get your location. Please enable location services.');
+        if (err.code === 1) {
+          toast.error('Location access denied. Please allow location access in your browser settings and try again.');
+        } else if (err.code === 2) {
+          toast.error('Location unavailable. Please check your device\'s location settings.');
+        } else {
+          toast.error('Could not get your location — try again or move to an area with better signal.');
+        }
       },
-      { enableHighAccuracy: true, timeout: 10000 }
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
     );
   };
 
-  const vanSelector = isMobile ? (
-    <VanPickerDrawer
+  const vanSelector = (
+    <VanPicker
       vans={vans}
       selectedVanId={selectedVanId}
       onSelect={(id) => { setSelectedVanId(id); setIsAddingNew(false); }}
       onAddNew={() => setIsAddingNew(true)} />
-  ) : (
-    <select
-      value={isAddingNew ? '__new__' : selectedVanId}
-      onChange={(e) => {
-        if (e.target.value === '__new__') { setIsAddingNew(true); setSelectedVanId(''); }
-        else { setIsAddingNew(false); setSelectedVanId(e.target.value); }
-      }}
-      className="w-full px-3 py-2 border border-input rounded-xl bg-background text-sm">
-      <option value="">Select a van...</option>
-      {vans.map((v) => <option key={v.id} value={v.id}>{v.name}</option>)}
-      <option value="__new__">➕ Add a new van...</option>
-    </select>
   );
 
   return (
