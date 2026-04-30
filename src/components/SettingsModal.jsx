@@ -69,6 +69,17 @@ export default function SettingsModal({ open, onClose, onShowHowItWorks }) {
                 <ChevronRight className="w-4 h-4 text-sky-400" />
               </button>
 
+              {/* Driving safety notice */}
+              <div className="flex items-start gap-3 px-4 py-3 rounded-2xl bg-red-50 border border-red-100">
+                <span className="text-lg shrink-0">🚫📱</span>
+                <div>
+                  <p className="text-sm font-semibold text-red-700">Stay safe on the road</p>
+                  <p className="text-xs text-red-600 leading-relaxed mt-0.5">
+                    Never use your phone while driving. Pull over safely before checking the app.
+                  </p>
+                </div>
+              </div>
+
               {/* Location accuracy notice */}
               <div className="flex items-start gap-3 px-4 py-3 rounded-2xl bg-amber-50 border border-amber-100">
                 <MapPin className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
