@@ -85,38 +85,42 @@ export default function ReportSightingModal({ open, onClose, vans, onReported })
 
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
-        const endOfDay = new Date();
-        endOfDay.setHours(23, 59, 59, 999);
+        try {
+          const endOfDay = new Date();
+          endOfDay.setHours(23, 59, 59, 999);
 
-        let vanId = selectedVanId;
-        let vanName = vans.find((v) => v.id === selectedVanId)?.name;
+          let vanId = selectedVanId;
+          let vanName = vans.find((v) => v.id === selectedVanId)?.name;
 
-        if (isAddingNew) {
-          // Create a new van record so drivers can see it
-          const newVan = await base44.entities.IceCreamVan.create({
-            name: newVanName.trim(),
-            driver_email: 'unknown@unknown.com',
-            is_active: false,
+          if (isAddingNew) {
+            const newVan = await base44.entities.IceCreamVan.create({
+              name: newVanName.trim(),
+              driver_email: 'unknown@unknown.com',
+              is_active: false,
+            });
+            vanId = newVan.id;
+            vanName = newVan.name;
+          }
+
+          await base44.entities.VanSighting.create({
+            van_id: vanId,
+            van_name: vanName,
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude,
+            reporter_name: reporterName.trim() || null,
+            note: note.trim() || null,
+            expires_at: endOfDay.toISOString()
           });
-          vanId = newVan.id;
-          vanName = newVan.name;
+
+          setLoading(false);
+          toast.success("Sighting reported! Thanks for helping others find ice cream 🍦");
+          reset();
+          onClose();
+          onReported();
+        } catch (e) {
+          setLoading(false);
+          toast.error('Something went wrong — please try again.');
         }
-
-        await base44.entities.VanSighting.create({
-          van_id: vanId,
-          van_name: vanName,
-          latitude: pos.coords.latitude,
-          longitude: pos.coords.longitude,
-          reporter_name: reporterName.trim() || null,
-          note: note.trim() || null,
-          expires_at: endOfDay.toISOString()
-        });
-
-        setLoading(false);
-        toast.success("Sighting reported! Thanks for helping others find ice cream 🍦");
-        reset();
-        onClose();
-        onReported();
       },
       (err) => {
         setLoading(false);
@@ -137,7 +141,7 @@ export default function ReportSightingModal({ open, onClose, vans, onReported })
       vans={vans}
       selectedVanId={selectedVanId}
       onSelect={(id) => { setSelectedVanId(id); setIsAddingNew(false); }}
-      onAddNew={() => setIsAddingNew(true)} />
+      onAddNew={() => { setIsAddingNew(true); setSelectedVanId(''); }} />
   );
 
   return (
