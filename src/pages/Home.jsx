@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import HowItWorksModal from '../components/HowItWorksModal';
 
 export default function Home() {
   const navigate = useNavigate();
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
+
+  useEffect(() => {
+    if (!localStorage.getItem('cone_finder_onboarded')) {
+      setShowHowItWorks(true);
+      localStorage.setItem('cone_finder_onboarded', '1');
+    }
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4" style={{ background: 'linear-gradient(135deg, #e0f7fa 0%, #fff9c4 50%, #fce4ec 100%)' }}>
@@ -57,6 +66,8 @@ export default function Home() {
           </motion.button>
         </div>
       </motion.div>
+
+      <HowItWorksModal open={showHowItWorks} onClose={() => setShowHowItWorks(false)} />
 
       <footer className="mt-12 py-6 text-center border-t border-border/20">
         <Link to="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
