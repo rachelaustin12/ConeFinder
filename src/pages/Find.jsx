@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { IceCream, Loader2, Plus, Star } from 'lucide-react';
@@ -17,37 +17,47 @@ export default function Find() {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const queryClient = useQueryClient();
   const [refreshing, setRefreshing] = useState(false);
-  const [pullStart, setPullStart] = useState(null);
   const [pullDelta, setPullDelta] = useState(0);
+  const mainRef = useRef(null);
+  const pullStartY = useRef(null);
 
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
-    await queryClient.invalidateQueries({ queryKey: ['active-vans'] });
-    await queryClient.invalidateQueries({ queryKey: ['van-sightings'] });
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ['active-vans'] }),
+      queryClient.invalidateQueries({ queryKey: ['van-sightings'] }),
+    ]);
     setTimeout(() => setRefreshing(false), 600);
   }, [queryClient]);
 
   useEffect(() => {
-    const onTouchStart = (e) => setPullStart(e.touches[0].clientY);
+    const el = mainRef.current;
+    if (!el) return;
+
+    const onTouchStart = (e) => {
+      if (el.scrollTop === 0) pullStartY.current = e.touches[0].clientY;
+    };
     const onTouchMove = (e) => {
-      if (pullStart === null || window.scrollY > 0) return;
-      const delta = e.touches[0].clientY - pullStart;
+      if (pullStartY.current === null) return;
+      const delta = e.touches[0].clientY - pullStartY.current;
       if (delta > 0) setPullDelta(Math.min(delta, 80));
+      else { pullStartY.current = null; setPullDelta(0); }
     };
     const onTouchEnd = () => {
       if (pullDelta > 60) handleRefresh();
-      setPullStart(null);
+      pullStartY.current = null;
       setPullDelta(0);
     };
-    document.addEventListener('touchstart', onTouchStart);
-    document.addEventListener('touchmove', onTouchMove);
-    document.addEventListener('touchend', onTouchEnd);
+
+    el.addEventListener('touchstart', onTouchStart, { passive: true });
+    el.addEventListener('touchmove', onTouchMove, { passive: true });
+    el.addEventListener('touchend', onTouchEnd);
     return () => {
-      document.removeEventListener('touchstart', onTouchStart);
-      document.removeEventListener('touchmove', onTouchMove);
-      document.removeEventListener('touchend', onTouchEnd);
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchmove', onTouchMove);
+      el.removeEventListener('touchend', onTouchEnd);
     };
-  }, [pullStart, pullDelta, handleRefresh]);
+  }, [pullDelta, handleRefresh]);
 
 
   const { data: vans = [], isLoading } = useQuery({
@@ -93,7 +103,7 @@ export default function Find() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background font-nunito">
+    <div ref={mainRef} className="min-h-screen overflow-y-auto bg-background font-nunito">
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center gap-3">
           <button onClick={() => navigate('/')} className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-muted transition-colors text-xl">
@@ -122,13 +132,13 @@ export default function Find() {
       </header>
 
       {/* Pull-to-refresh indicator */}
-      {(pullDelta > 10 || refreshing) &&
-      <div className="fixed top-14 left-0 right-0 z-40 flex justify-center pointer-events-none">
+      {(pullDelta > 10 || refreshing) && (
+        <div className="sticky top-14 left-0 right-0 z-40 flex justify-center pointer-events-none -mb-8">
           <div className={`mt-2 px-4 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-semibold shadow transition-all ${refreshing ? 'opacity-100' : 'opacity-70'}`}>
             {refreshing ? '↻ Refreshing...' : pullDelta > 60 ? '↑ Release to refresh' : '↓ Pull to refresh'}
           </div>
         </div>
-      }
+      )}
 
       <main className="max-w-5xl mx-auto px-4 py-6 pb-20">
         <motion.div
