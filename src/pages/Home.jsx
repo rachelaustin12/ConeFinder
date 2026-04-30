@@ -21,7 +21,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col items-center justify-center px-4 relative" style={{ background: 'linear-gradient(135deg, #e0f7fa 0%, #fff9c4 50%, #fce4ec 100%)' }}>
       <button
         onClick={() => setShowSettings(true)}
-        className="absolute top-4 right-4 p-2 rounded-full bg-white/60 hover:bg-white/90 transition-colors shadow-sm"
+        className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/60 hover:bg-white/90 transition-colors shadow-sm"
         style={{ marginTop: 'env(safe-area-inset-top)' }}
       >
         <Settings className="w-5 h-5 text-muted-foreground" />
