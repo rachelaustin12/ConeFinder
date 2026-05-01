@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { IceCream, Loader2, Plus, Star } from 'lucide-react';
+import { IceCream, Loader2, Plus, Star, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -106,10 +106,11 @@ export default function Find() {
     <div ref={mainRef} className="min-h-screen overflow-y-auto bg-background font-nunito">
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center gap-3">
-          <button onClick={() => navigate('/')} className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-muted transition-colors text-xl">
-            🏡
+          <button onClick={() => navigate('/')} className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-muted transition-colors gap-1.5 text-sm font-semibold text-muted-foreground">
+            <ArrowLeft className="w-4 h-4" />
+            <span className="hidden sm:inline">Home</span>
           </button>
-          <span className="text-xl hidden md:inline">🗺️</span>
+          <span className="text-xl">🗺️</span>
           <h1 className="text-[hsl(var(--color-sky))] text-lg font-semibold flex-1">Find Vans</h1>
           <Button
             size="sm"
