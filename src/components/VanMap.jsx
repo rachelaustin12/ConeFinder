@@ -20,13 +20,9 @@ const sightingIcon = new L.DivIcon({
 });
 
 const userIcon = new L.DivIcon({
-  html: `<div style="position:relative;width:22px;height:22px;">
-    <div style="position:absolute;inset:0;background:rgba(59,130,246,0.2);border-radius:50%;animation:pulse 2s ease-out infinite;transform-origin:center;"></div>
-    <div style="position:absolute;inset:3px;background:#3b82f6;border:2.5px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(59,130,246,0.5);"></div>
-  </div>
-  <style>@keyframes pulse{0%{transform:scale(1);opacity:0.8}70%{transform:scale(2.4);opacity:0}100%{transform:scale(2.4);opacity:0}}</style>`,
-  iconSize: [22, 22],
-  iconAnchor: [11, 11],
+  html: `<div style="font-size:36px;line-height:1;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.35));color:#3b82f6;">➤</div>`,
+  iconSize: [36, 36],
+  iconAnchor: [18, 18],
   className: ''
 });
 
