@@ -196,7 +196,6 @@ export default function Find() {
       <AddReviewModal
         open={showReviewModal}
         onClose={() => setShowReviewModal(false)}
-        vans={vans}
         onReviewed={() => {}} />
       
     </div>);

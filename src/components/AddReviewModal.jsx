@@ -1,63 +1,67 @@
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
-import { Star, Loader2, Camera, ChevronDown, Plus } from 'lucide-react';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { Star, Loader2, Camera, ChevronDown, Plus, X } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 
-function VanPickerDrawer({ vans, selectedVanId, onSelect, onAddNew }) {
+// Simple inline dropdown — avoids nested portal z-index issues inside Dialog
+function VanPicker({ vans, selectedVanId, onSelect, onAddNew }) {
   const [open, setOpen] = useState(false);
   const selected = vans.find(v => v.id === selectedVanId);
 
   return (
-    <>
+    <div className="relative">
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => setOpen(o => !o)}
         className="w-full flex items-center justify-between px-3 py-2 border border-input rounded-xl bg-background text-sm text-left hover:bg-muted/40 transition-colors"
       >
         <span className={selected ? 'text-foreground' : 'text-muted-foreground'}>
           {selected ? selected.name : 'Select a van...'}
         </span>
-        <ChevronDown className="w-4 h-4 text-muted-foreground" />
+        <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
-      <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>Which van would you like to review?</DrawerTitle>
-          </DrawerHeader>
-          <div className="px-4 pb-8 space-y-2">
+
+      {open && (
+        <>
+          {/* backdrop */}
+          <div className="fixed inset-0 z-[150]" onClick={() => setOpen(false)} />
+          <div className="absolute z-[160] top-full left-0 right-0 mt-1 bg-popover border border-border rounded-xl shadow-xl overflow-hidden max-h-56 overflow-y-auto">
+            {vans.length === 0 && (
+              <p className="text-xs text-muted-foreground px-4 py-3">No vans found yet.</p>
+            )}
             {vans.map(v => (
               <button
                 key={v.id}
+                type="button"
                 onClick={() => { onSelect(v.id); setOpen(false); }}
-                className={`w-full text-left px-4 py-3 rounded-xl font-semibold text-sm transition-colors ${
-                  selectedVanId === v.id
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted hover:bg-muted/80'
+                className={`w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-muted ${
+                  selectedVanId === v.id ? 'bg-primary/10 text-primary font-semibold' : ''
                 }`}
               >
                 {v.name}
               </button>
             ))}
             <button
+              type="button"
               onClick={() => { onAddNew(); setOpen(false); }}
-              className="w-full text-left px-4 py-3 rounded-xl text-sm transition-colors bg-muted/50 hover:bg-muted/80 text-primary font-semibold flex items-center gap-2 border border-dashed border-primary/40">
+              className="w-full text-left px-4 py-2.5 text-sm text-primary font-semibold flex items-center gap-2 border-t border-border hover:bg-muted transition-colors"
+            >
               <Plus className="w-4 h-4" /> Add a new van...
             </button>
           </div>
-        </DrawerContent>
-      </Drawer>
-    </>
+        </>
+      )}
+    </div>
   );
 }
 
-export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
+export default function AddReviewModal({ open, onClose, onReviewed }) {
   const [selectedVanId, setSelectedVanId] = useState('');
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [newVanName, setNewVanName] = useState('');
@@ -66,7 +70,19 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
   const [reviewerName, setReviewerName] = useState('');
   const [photoFile, setPhotoFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const isMobile = useIsMobile();
+
+  // Fetch ALL vans (not just active ones) so the reviewer can always pick one
+  const { data: allVans = [] } = useQuery({
+    queryKey: ['all-vans-for-review'],
+    queryFn: () => base44.entities.IceCreamVan.list('-updated_date', 200),
+    enabled: open,
+  });
+
+  const handleClose = () => {
+    setSelectedVanId(''); setIsAddingNew(false); setNewVanName('');
+    setRating(0); setComment(''); setReviewerName(''); setPhotoFile(null);
+    onClose();
+  };
 
   const handleSubmit = async () => {
     if (!isAddingNew && !selectedVanId) { toast.error('Please select a van'); return; }
@@ -76,7 +92,7 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
     setLoading(true);
 
     let vanId = selectedVanId;
-    let van = vans.find(v => v.id === selectedVanId);
+    let van = allVans.find(v => v.id === selectedVanId);
 
     if (isAddingNew) {
       const newVan = await base44.entities.IceCreamVan.create({
@@ -105,13 +121,12 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
 
     setLoading(false);
     toast.success('Review posted! Thanks 🍦');
-    setSelectedVanId(''); setIsAddingNew(false); setNewVanName(''); setRating(0); setComment(''); setReviewerName(''); setPhotoFile(null);
-    onClose();
+    handleClose();
     onReviewed();
   };
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="rounded-3xl max-w-sm font-nunito">
         <DialogHeader>
          <DialogTitle className="text-[hsl(var(--color-sky))] text-xl font-thin tracking-tight flex items-center gap-2">
@@ -126,26 +141,12 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
         <div className="space-y-4 pt-1">
           <div className="space-y-1.5">
             <Label className="text-sm font-bold">Which van?</Label>
-            {isMobile ? (
-              <VanPickerDrawer
-                vans={vans}
-                selectedVanId={selectedVanId}
-                onSelect={(id) => { setSelectedVanId(id); setIsAddingNew(false); }}
-                onAddNew={() => { setIsAddingNew(true); setSelectedVanId(''); }} />
-            ) : (
-              <select
-                value={isAddingNew ? '__new__' : selectedVanId}
-                onChange={e => {
-                  if (e.target.value === '__new__') { setIsAddingNew(true); setSelectedVanId(''); }
-                  else { setIsAddingNew(false); setSelectedVanId(e.target.value); }
-                }}
-                className="w-full px-3 py-2 border border-input rounded-xl bg-background text-sm"
-              >
-                <option value="">Select a van...</option>
-                {vans.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
-                <option value="__new__">➕ Add a new van...</option>
-              </select>
-            )}
+            <VanPicker
+              vans={allVans}
+              selectedVanId={selectedVanId}
+              onSelect={(id) => { setSelectedVanId(id); setIsAddingNew(false); }}
+              onAddNew={() => { setIsAddingNew(true); setSelectedVanId(''); }}
+            />
             {isAddingNew && (
               <div className="space-y-1.5 mt-2">
                 <Input
@@ -164,7 +165,7 @@ export default function AddReviewModal({ open, onClose, vans, onReviewed }) {
             <Label className="text-sm font-bold">Rating</Label>
             <div className="flex gap-1">
               {[1,2,3,4,5].map(n => (
-                <button key={n} onClick={() => setRating(n)} className="text-2xl transition-transform hover:scale-110 active:scale-95">
+                <button key={n} type="button" onClick={() => setRating(n)} className="text-2xl transition-transform hover:scale-110 active:scale-95">
                   {n <= rating ? '⭐' : '☆'}
                 </button>
               ))}
