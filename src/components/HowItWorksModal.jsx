@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ChevronRight, X } from 'lucide-react';
 
@@ -28,6 +28,7 @@ const STEPS = [
 
 export default function HowItWorksModal({ open, onClose }) {
   const [step, setStep] = useState(0);
+  const reducedMotion = useReducedMotion();
 
   const handleNext = () => {
     if (step < STEPS.length - 1) {
@@ -57,10 +58,10 @@ export default function HowItWorksModal({ open, onClose }) {
           {/* Card */}
           <motion.div
             key={step}
-            initial={{ opacity: 0, y: 24, scale: 0.96 }}
+            initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 24, scale: reducedMotion ? 1 : 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -16, scale: 0.96 }}
-            transition={{ duration: 0.28, ease: [0.25, 0.46, 0.45, 0.94] }}
+            exit={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : -16, scale: reducedMotion ? 1 : 0.96 }}
+            transition={reducedMotion ? { duration: 0 } : { duration: 0.28, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="relative z-10 bg-white rounded-3xl shadow-2xl max-w-xs w-full p-8 flex flex-col items-center text-center"
           >
             <button

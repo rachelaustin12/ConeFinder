@@ -121,7 +121,7 @@ export default function Driver() {
   return (
     <div className="min-h-screen bg-background font-nunito">
       {headerEl}
-      <main className="max-w-2xl mx-auto px-4 py-6">
+      <main className="max-w-2xl mx-auto px-4 py-6" style={{ paddingBottom: 'calc(5rem + env(safe-area-inset-bottom))' }}>
         {!myVan ? (
           <VanSetupForm user={user} onCreated={handleVanCreated} />
         ) : (

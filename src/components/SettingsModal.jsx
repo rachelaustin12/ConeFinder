@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { X, Info, Trash2, MapPin, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { base44 } from '@/api/base44Client';
@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 export default function SettingsModal({ open, onClose, onShowHowItWorks }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const reducedMotion = useReducedMotion();
 
   const handleDeleteData = async () => {
     setDeleting(true);
@@ -42,10 +43,10 @@ export default function SettingsModal({ open, onClose, onShowHowItWorks }) {
           <motion.div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
 
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 40 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 40 }}
-            transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+            exit={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 40 }}
+            transition={reducedMotion ? { duration: 0 } : { duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="relative z-10 bg-white rounded-3xl shadow-2xl w-full max-w-sm p-6"
           >
             <button onClick={onClose} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors">

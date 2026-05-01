@@ -140,7 +140,7 @@ export default function Find() {
         </div>
       )}
 
-      <main className="max-w-5xl mx-auto px-4 py-6 pb-20">
+      <main className="max-w-5xl mx-auto px-4 py-6" style={{ paddingBottom: 'calc(5rem + env(safe-area-inset-bottom))' }}>
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
