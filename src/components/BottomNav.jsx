@@ -1,11 +1,12 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Search, Truck, Home } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 
 export default function BottomNav() {
   const location = useLocation();
   const isMobile = useIsMobile();
+  const reducedMotion = useReducedMotion();
 
   // Always show on tab pages on mobile
   const TAB_PATHS = ['/', '/find', '/driver'];
@@ -42,12 +43,12 @@ export default function BottomNav() {
               <motion.div
                 layoutId="tab-indicator"
                 className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-primary"
-                transition={{ type: 'spring', stiffness: 400, damping: 35 }}
+                transition={reducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 400, damping: 35 }}
               />
             )}
             <motion.div
-              animate={{ scale: active ? 1.15 : 1 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              animate={{ scale: reducedMotion ? 1 : active ? 1.15 : 1 }}
+              transition={reducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 400, damping: 30 }}
             >
               <Icon className="w-5 h-5" />
             </motion.div>

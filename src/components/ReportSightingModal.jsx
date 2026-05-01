@@ -13,17 +13,25 @@ function VanPicker({ vans, selectedVanId, onSelect, onAddNew }) {
   const ref = useRef(null);
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
+    const handleOutside = (e) => {
       if (ref.current && !ref.current.contains(e.target)) setOpen(false);
     };
-    if (open) document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    if (open) {
+      document.addEventListener('mousedown', handleOutside);
+      document.addEventListener('touchend', handleOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleOutside);
+      document.removeEventListener('touchend', handleOutside);
+    };
   }, [open]);
 
   return (
     <div className="relative" ref={ref}>
       <button
         type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
         className="w-full flex items-center justify-between px-3 py-2 border border-input rounded-xl bg-background text-sm text-left hover:bg-muted/40 transition-colors">
         <span className={selected ? 'text-foreground' : 'text-muted-foreground'}>
@@ -33,7 +41,7 @@ function VanPicker({ vans, selectedVanId, onSelect, onAddNew }) {
       </button>
 
       {open && (
-        <div className="absolute z-[9999] top-full mt-1 left-0 right-0 bg-background border border-input rounded-xl shadow-lg overflow-hidden max-h-56 overflow-y-auto">
+        <div role="listbox" className="absolute z-[9999] top-full mt-1 left-0 right-0 bg-background border border-input rounded-xl shadow-lg overflow-hidden max-h-56 overflow-y-auto">
           {vans.length === 0 && (
             <div className="px-4 py-3 text-sm text-muted-foreground">No vans registered yet</div>
           )}
@@ -41,7 +49,9 @@ function VanPicker({ vans, selectedVanId, onSelect, onAddNew }) {
             <button
               key={v.id}
               type="button"
-              onClick={() => { onSelect(v.id); setOpen(false); }}
+              role="option"
+              aria-selected={selectedVanId === v.id}
+              onPointerDown={(e) => { e.preventDefault(); onSelect(v.id); setOpen(false); }}
               className={`w-full text-left px-4 py-3 text-sm transition-colors hover:bg-muted ${
                 selectedVanId === v.id ? 'bg-primary/10 text-primary font-semibold' : ''
               }`}>
@@ -50,7 +60,7 @@ function VanPicker({ vans, selectedVanId, onSelect, onAddNew }) {
           ))}
           <button
             type="button"
-            onClick={() => { onAddNew(); setOpen(false); }}
+            onPointerDown={(e) => { e.preventDefault(); onAddNew(); setOpen(false); }}
             className="w-full text-left px-4 py-3 text-sm transition-colors hover:bg-muted text-primary font-semibold flex items-center gap-2 border-t border-input">
             <Plus className="w-4 h-4" /> Add a new van...
           </button>

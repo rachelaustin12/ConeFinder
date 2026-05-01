@@ -10,7 +10,7 @@ import Find from './pages/Find';
 import Driver from './pages/Driver';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import BottomNav from './components/BottomNav';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 
 // Tab order defines direction of slide animations
@@ -26,6 +26,7 @@ const TabStack = () => {
   const location = useLocation();
   const prevPathRef = useRef(location.pathname);
   const [direction, setDirection] = useState(0); // -1 left, 0 none, 1 right
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     const prev = tabIndex(prevPathRef.current);
@@ -68,10 +69,10 @@ const TabStack = () => {
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
-            initial={{ opacity: 0, x: direction * 40 }}
+            initial={{ opacity: reducedMotion ? 1 : 0, x: reducedMotion ? 0 : direction * 40 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -direction * 40 }}
-            transition={{ duration: 0.22, ease: [0.25, 0.46, 0.45, 0.94] }}
+            exit={{ opacity: reducedMotion ? 1 : 0, x: reducedMotion ? 0 : -direction * 40 }}
+            transition={reducedMotion ? { duration: 0 } : { duration: 0.22, ease: [0.25, 0.46, 0.45, 0.94] }}
             style={{ position: 'relative', zIndex: 2 }}
           >
             <Routes location={location}>
