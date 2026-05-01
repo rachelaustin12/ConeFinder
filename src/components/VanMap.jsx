@@ -45,14 +45,14 @@ function MyLocationButton({ userPos }) {
           width: '34px',
           height: '34px',
           cursor: 'pointer',
-          fontSize: '18px',
+          fontSize: '22px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
         }}
       >
-      📍
+      ➤
       </button>
     </div>
   );
