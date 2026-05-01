@@ -24,6 +24,7 @@ const tabIndex = (path) => {
 // Keep-alive tab stack: all tab pages stay mounted, only shown/hidden
 const TabStack = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const prevPathRef = useRef(location.pathname);
   const [direction, setDirection] = useState(0); // -1 left, 0 none, 1 right
   const reducedMotion = useReducedMotion();
@@ -38,6 +39,27 @@ const TabStack = () => {
     }
     prevPathRef.current = location.pathname;
   }, [location.pathname]);
+
+  // Android back button: if on a non-home tab, go back to '/' instead of exiting
+  useEffect(() => {
+    const isTab = TAB_PATHS.includes(location.pathname);
+    if (isTab && location.pathname !== '/') {
+      // Push a sentinel entry so there's always something to pop back to
+      window.history.pushState({ tab: location.pathname }, '');
+    }
+
+    const handlePopState = (e) => {
+      const current = window.location.pathname;
+      const onTab = TAB_PATHS.includes(current);
+      if (onTab && current !== '/') {
+        // Intercept: navigate home instead of going back in browser history
+        navigate('/', { replace: true });
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [location.pathname, navigate]);
 
   const isTab = TAB_PATHS.includes(location.pathname);
 
