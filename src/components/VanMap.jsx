@@ -12,10 +12,10 @@ const vanIcon = new L.DivIcon({
 });
 
 const sightingIcon = new L.DivIcon({
-  html: `<div style="font-size:28px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.2));">📍</div>`,
-  iconSize: [36, 36],
-  iconAnchor: [18, 36],
-  popupAnchor: [0, -30],
+  html: `<div style="font-size:32px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.2));">🍦</div>`,
+  iconSize: [40, 40],
+  iconAnchor: [20, 40],
+  popupAnchor: [0, -35],
   className: ''
 });
 
@@ -52,7 +52,7 @@ function MyLocationButton({ userPos }) {
           boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
         }}
       >
-      🧭
+      📍
       </button>
     </div>
   );
