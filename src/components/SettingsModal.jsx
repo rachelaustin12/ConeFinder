@@ -93,18 +93,18 @@ export default function SettingsModal({ open, onClose, onShowHowItWorks }) {
               </div>
 
               {/* Delete account data */}
-              {!confirmDelete ?
-            <button
-              onClick={() => setConfirmDelete(true)} className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-red-50 hover:bg-red-100 transition-colors text-left hidden">
+              {!confirmDelete ? null :
 
-              
-                  <Trash2 className="w-5 h-5 text-red-400 shrink-0" />
-                  <div className="flex-1">
-                    <p className="text-sm font-semibold text-red-600">Delete my data</p>
-                    <p className="text-xs text-red-400">Removes your van profile and location data</p>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-red-300" />
-                </button> :
+
+
+
+
+
+
+
+
+
+
 
             <div className="px-4 py-3 rounded-2xl bg-red-50 border border-red-200 space-y-3">
                   <p className="text-sm font-semibold text-red-600">Are you sure?</p>
