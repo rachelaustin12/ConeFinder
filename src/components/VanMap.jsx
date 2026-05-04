@@ -50,12 +50,12 @@ function MyLocationButton({ userPos }) {
           alignItems: 'center',
           justifyContent: 'center',
           boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
-        }}
-      >
+        }}>
+        
       <span style={{ color: '#3b82f6', fontSize: '22px', lineHeight: 1 }}>➤</span>
       </button>
-    </div>
-  );
+    </div>);
+
 }
 
 export default function VanMap({ vans, className = "" }) {
@@ -74,7 +74,7 @@ export default function VanMap({ vans, className = "" }) {
   const center = userPos || defaultCenter;
 
   return (
-    <div className="mb-6 rounded-2xl overflow-hidden shadow-lg border border-border h-[50vh]">
+    <div className="bg-slate-50 mb-6 rounded-2xl overflow-hidden shadow-lg border border-border h-[50vh]">
       <MapContainer center={center} zoom={13} className="w-full h-full" style={{ minHeight: '400px' }}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
