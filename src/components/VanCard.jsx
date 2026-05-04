@@ -74,29 +74,29 @@ export default function VanCard({ van, userPosition }) {
                   }
                 </div>
                 <div className="flex items-center gap-2">
-                  {van.latitude && van.longitude && (
-                    <>
+                  {van.latitude && van.longitude &&
+                  <>
                       <a
-                        href={`https://waze.com/ul?ll=${van.latitude},${van.longitude}&navigate=yes`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs font-semibold px-2 py-0.5 rounded-lg bg-[#06ccff]/10 text-[#06ccff] hover:bg-[#06ccff]/20 transition-colors"
-                      >
+                      href={`https://waze.com/ul?ll=${van.latitude},${van.longitude}&navigate=yes`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-semibold px-2 py-0.5 rounded-lg bg-[#06ccff]/10 text-[#06ccff] hover:bg-[#06ccff]/20 transition-colors">
+                      
                         Waze
                       </a>
                       <a
-                        href={`https://www.google.com/maps/dir/?api=1&destination=${van.latitude},${van.longitude}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs font-semibold px-2 py-0.5 rounded-lg bg-green-500/10 text-green-600 hover:bg-green-500/20 transition-colors"
-                      >
+                      href={`https://www.google.com/maps/dir/?api=1&destination=${van.latitude},${van.longitude}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-semibold px-2 py-0.5 rounded-lg bg-green-500/10 text-green-600 hover:bg-green-500/20 transition-colors">
+                      
                         Maps
                       </a>
                     </>
-                  )}
+                  }
                   {!van.isSighting && van.messages_enabled !== false &&
-                    <button
-                      onClick={() => setShowMessage(true)} className="bg-[#f5a8c3] text-[hsl(var(--secondary))] text-xs font-semibold flex items-center gap-1 hover:text-primary/80 transition-colors">
+                  <button
+                    onClick={() => setShowMessage(true)} className="bg-[#f5eca8] text-[hsl(var(--accent))] text-xs font-semibold flex items-center gap-1 hover:text-primary/80 transition-colors">
                       <MessageCircle className="w-3.5 h-3.5" />
                       Message me
                     </button>
