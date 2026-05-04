@@ -53,7 +53,7 @@ export default function VanMarkerPopup({ van }) {
         <a
           href={googleMapsUrl}
           target="_blank"
-          rel="noopener noreferrer" className="text-[hsl(var(--card-foreground))] px-2 py-1.5 text-xs font-semibold opacity-45 rounded-lg flex-1 flex items-center justify-center gap-1"
+          rel="noopener noreferrer" className="text-[hsl(var(--destructive))] px-2 py-1.5 text-xs font-semibold opacity-45 rounded-lg flex-1 flex items-center justify-center gap-1"
 
           style={{ background: '#4285F4' }}>
           
