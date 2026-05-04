@@ -46,8 +46,8 @@ export default function SettingsModal({ open, onClose, onShowHowItWorks }) {
           initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 40 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 40 }}
-          transition={reducedMotion ? { duration: 0 } : { duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="relative z-10 bg-white rounded-3xl shadow-2xl w-full max-w-sm p-6">
+          transition={reducedMotion ? { duration: 0 } : { duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }} className="bg-white my-40 p-6 rounded-3xl relative z-10 shadow-2xl w-full max-w-sm">
+          
           
             <button onClick={onClose} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors">
               <X className="w-4 h-4" />
