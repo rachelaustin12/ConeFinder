@@ -16,7 +16,7 @@ export default function SettingsModal({ open, onClose, onShowHowItWorks }) {
       // Delete any vans this user created
       const vans = await base44.entities.IceCreamVan.filter({});
       const user = await base44.auth.me();
-      const myVans = vans.filter(v => v.created_by === user.email || v.driver_email === user.email);
+      const myVans = vans.filter((v) => v.created_by === user.email || v.driver_email === user.email);
       for (const van of myVans) {
         await base44.entities.IceCreamVan.delete(van.id);
       }
@@ -33,22 +33,22 @@ export default function SettingsModal({ open, onClose, onShowHowItWorks }) {
 
   return (
     <AnimatePresence>
-      {open && (
-        <motion.div
-          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center px-4 pb-4 sm:pb-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
+      {open &&
+      <motion.div
+        className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center px-4 pb-4 sm:pb-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}>
+        
           <motion.div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
 
           <motion.div
-            initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 40 }}
-            transition={reducedMotion ? { duration: 0 } : { duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="relative z-10 bg-white rounded-3xl shadow-2xl w-full max-w-sm p-6"
-          >
+          initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 40 }}
+          transition={reducedMotion ? { duration: 0 } : { duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="relative z-10 bg-white rounded-3xl shadow-2xl w-full max-w-sm p-6">
+          
             <button onClick={onClose} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors">
               <X className="w-4 h-4" />
             </button>
@@ -59,9 +59,9 @@ export default function SettingsModal({ open, onClose, onShowHowItWorks }) {
             <div className="space-y-3">
               {/* How it works */}
               <button
-                onClick={() => { onClose(); onShowHowItWorks(); }}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-sky-50 hover:bg-sky-100 transition-colors text-left"
-              >
+              onClick={() => {onClose();onShowHowItWorks();}}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-sky-50 hover:bg-sky-100 transition-colors text-left">
+              
                 <Info className="w-5 h-5 text-sky-500 shrink-0" />
                 <div className="flex-1">
                   <p className="text-sm font-semibold text-sky-700">How it works</p>
@@ -93,20 +93,20 @@ export default function SettingsModal({ open, onClose, onShowHowItWorks }) {
               </div>
 
               {/* Delete account data */}
-              {!confirmDelete ? (
-                <button
-                  onClick={() => setConfirmDelete(true)}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-red-50 hover:bg-red-100 transition-colors text-left"
-                >
+              {!confirmDelete ?
+            <button
+              onClick={() => setConfirmDelete(true)} className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-red-50 hover:bg-red-100 transition-colors text-left hidden">
+
+              
                   <Trash2 className="w-5 h-5 text-red-400 shrink-0" />
                   <div className="flex-1">
                     <p className="text-sm font-semibold text-red-600">Delete my data</p>
                     <p className="text-xs text-red-400">Removes your van profile and location data</p>
                   </div>
                   <ChevronRight className="w-4 h-4 text-red-300" />
-                </button>
-              ) : (
-                <div className="px-4 py-3 rounded-2xl bg-red-50 border border-red-200 space-y-3">
+                </button> :
+
+            <div className="px-4 py-3 rounded-2xl bg-red-50 border border-red-200 space-y-3">
                   <p className="text-sm font-semibold text-red-600">Are you sure?</p>
                   <p className="text-xs text-red-500">This will permanently delete your van profile and associated data. This can't be undone.</p>
                   <div className="flex gap-2">
@@ -118,11 +118,11 @@ export default function SettingsModal({ open, onClose, onShowHowItWorks }) {
                     </Button>
                   </div>
                 </div>
-              )}
+            }
             </div>
           </motion.div>
         </motion.div>
-      )}
-    </AnimatePresence>
-  );
+      }
+    </AnimatePresence>);
+
 }
