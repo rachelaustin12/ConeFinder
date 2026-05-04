@@ -87,8 +87,8 @@ export default function VanCard({ van, userPosition }) {
                       <a
                       href={`https://www.google.com/maps/dir/?api=1&destination=${van.latitude},${van.longitude}`}
                       target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs font-semibold px-2 py-0.5 rounded-lg bg-green-500/10 text-green-600 hover:bg-green-500/20 transition-colors">
+                      rel="noopener noreferrer" className="bg-green-500/10 text-red-600 px-2 py-0.5 text-xs font-semibold rounded-lg hover:bg-green-500/20 transition-colors">
+                      
                       
                         Maps
                       </a>
