@@ -39,14 +39,16 @@
     "message"
   ],
   "rls": {
-    "create": {},
+    "create": {
+      "created_by": "{{user.email}}"
+    },
     "read": {
       "$or": [
         {
-          "data.driver_email": "{{user.email}}"
+          "created_by": "{{user.email}}"
         },
         {
-          "created_by": "{{user.email}}"
+          "data.driver_email": "{{user.email}}"
         },
         {
           "user_condition": {
