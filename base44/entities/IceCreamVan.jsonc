@@ -55,15 +55,28 @@
     "driver_email"
   ],
   "rls": {
-    "create": {},
-    "read": {},
-    "update": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
       "$or": [
+        {
+          "data.is_active": true
+        },
         {
           "created_by": "{{user.email}}"
         },
         {
-          "data.driver_email": "{{user.email}}"
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
         },
         {
           "user_condition": {
@@ -76,9 +89,6 @@
       "$or": [
         {
           "created_by": "{{user.email}}"
-        },
-        {
-          "data.driver_email": "{{user.email}}"
         },
         {
           "user_condition": {
