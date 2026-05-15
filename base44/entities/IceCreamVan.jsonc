@@ -55,7 +55,9 @@
     "driver_email"
   ],
   "rls": {
-    "create": {},
+    "create": {
+      "data.driver_email": "{{user.email}}"
+    },
     "read": {
       "$or": [
         {
