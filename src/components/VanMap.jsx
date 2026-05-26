@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Tooltip, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import VanMarkerPopup from './VanMarkerPopup';
@@ -31,12 +31,35 @@ const userIcon = new L.DivIcon({
 });
 
 
-function MyLocationButton({ userPos }) {
+function MyLocationButton({ userPos, onLocated }) {
   const map = useMap();
+  const [locating, setLocating] = React.useState(false);
+
+  const handleClick = () => {
+    // If we already have position, fly there immediately
+    if (userPos) {
+      map.flyTo(userPos, 15, { duration: 1.2 });
+      return;
+    }
+    // Otherwise request location fresh
+    if (!navigator.geolocation) return;
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const latLng = [pos.coords.latitude, pos.coords.longitude];
+        onLocated(latLng);
+        map.flyTo(latLng, 15, { duration: 1.2 });
+        setLocating(false);
+      },
+      () => setLocating(false),
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  };
+
   return (
     <div style={{ position: 'absolute', bottom: '16px', right: '10px', zIndex: 1000 }}>
       <button
-        onClick={() => userPos && map.flyTo(userPos, 15, { duration: 1.2 })}
+        onClick={handleClick}
         title="Go to my location"
         style={{
           background: 'white',
@@ -45,17 +68,18 @@ function MyLocationButton({ userPos }) {
           width: '34px',
           height: '34px',
           cursor: 'pointer',
-          fontSize: '22px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
         }}>
-        
-      <span style={{ color: '#3b82f6', fontSize: '22px', lineHeight: 1 }}>➤</span>
+        {locating
+          ? <span style={{ fontSize: '14px' }}>⏳</span>
+          : <span style={{ color: '#3b82f6', fontSize: '22px', lineHeight: 1 }}>➤</span>
+        }
       </button>
-    </div>);
-
+    </div>
+  );
 }
 
 export default function VanMap({ vans, className = "" }) {
@@ -83,7 +107,7 @@ export default function VanMap({ vans, className = "" }) {
           maxZoom={20} />
         
 
-        <MyLocationButton userPos={userPos} />
+        <MyLocationButton userPos={userPos} onLocated={setUserPos} />
         {userPos && <Marker position={userPos} icon={userIcon} />}
         {vans.filter((v) => v.is_active && v.latitude && v.longitude && !isNaN(v.latitude) && !isNaN(v.longitude)).map((van) =>
         <Marker key={van.id} position={[van.latitude, van.longitude]} icon={van.isSighting ? sightingIcon : vanIcon}>
