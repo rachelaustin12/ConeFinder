@@ -66,6 +66,8 @@
     @apply bg-background text-foreground font-nunito;
     font-weight: 400;
     overscroll-behavior: none;
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 
   button, a, input, select, textarea, label {
