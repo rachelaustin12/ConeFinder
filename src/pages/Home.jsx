@@ -27,7 +27,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 relative" style={{ background: 'linear-gradient(135deg, #e0f7fa 0%, #fff9c4 50%, #fce4ec 100%)' }}>
-      <div className="absolute top-4 right-4 z-10 flex items-center gap-2" style={{ marginTop: 'env(safe-area-inset-top)' }}>
+      <div className="absolute right-4 z-10 flex items-center gap-2" style={{ top: 'calc(env(safe-area-inset-top) + 1rem)' }}>
         <button
           onClick={() => setShowSettings(true)}
           className="p-2 rounded-full bg-white/60 hover:bg-white/90 transition-colors shadow-sm"

@@ -81,7 +81,7 @@ export default function Driver() {
 
   const headerEl = (
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
-      <div className="max-w-5xl mx-auto px-4 h-14 flex items-center gap-2">
+      <div className="max-w-5xl mx-auto px-4 flex items-center gap-2 h-14">
         <button onClick={() => navigate('/')} className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-muted transition-colors gap-1.5 text-sm font-semibold text-muted-foreground">
           <ArrowLeft className="w-4 h-4" />
           <span className="hidden sm:inline">Home</span>

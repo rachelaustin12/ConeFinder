@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,24 +10,9 @@ import { Loader2, ChevronDown, Plus } from 'lucide-react';
 function VanPicker({ vans, selectedVanId, onSelect, onAddNew }) {
   const [open, setOpen] = useState(false);
   const selected = vans.find((v) => v.id === selectedVanId);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const handleOutside = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
-    };
-    if (open) {
-      document.addEventListener('mousedown', handleOutside);
-      document.addEventListener('touchend', handleOutside);
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleOutside);
-      document.removeEventListener('touchend', handleOutside);
-    };
-  }, [open]);
 
   return (
-    <div className="relative" ref={ref}>
+    <div className="relative">
       <button
         type="button"
         aria-haspopup="listbox"
@@ -41,7 +26,9 @@ function VanPicker({ vans, selectedVanId, onSelect, onAddNew }) {
       </button>
 
       {open && (
-        <div role="listbox" className="absolute z-[9999] top-full mt-1 left-0 right-0 bg-background border border-input rounded-xl shadow-lg overflow-hidden max-h-56 overflow-y-auto">
+        <>
+          <div className="fixed inset-0 z-[150]" onPointerDown={() => setOpen(false)} />
+          <div role="listbox" className="absolute z-[160] top-full mt-1 left-0 right-0 bg-popover border border-border rounded-xl shadow-xl overflow-hidden max-h-56 overflow-y-auto">
           {vans.length === 0 && (
             <div className="px-4 py-3 text-sm text-muted-foreground">No vans registered yet</div>
           )}
@@ -65,6 +52,7 @@ function VanPicker({ vans, selectedVanId, onSelect, onAddNew }) {
             <Plus className="w-4 h-4" /> Add a new van...
           </button>
         </div>
+        </>
       )}
     </div>
   );
