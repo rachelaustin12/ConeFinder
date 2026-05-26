@@ -115,7 +115,11 @@ const AuthenticatedApp = () => {
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
       <div className="fixed inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #e0f7fa 0%, #fff9c4 50%, #fce4ec 100%)' }}>
-        <div className="text-7xl drop-shadow-md">🍦</div>
+        <motion.div
+          animate={{ scale: [1, 1.15, 1], rotate: [-8, 8, -8] }}
+          transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+          className="text-7xl drop-shadow-md"
+        >🍦</motion.div>
       </div>
     );
   }
