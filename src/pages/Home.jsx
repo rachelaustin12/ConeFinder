@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import HowItWorksModal from '../components/HowItWorksModal';
 import SettingsModal from '../components/SettingsModal';
-import { Settings } from 'lucide-react';
+import { Settings, X } from 'lucide-react';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -17,15 +17,31 @@ export default function Home() {
     }
   }, []);
 
+  const handleExit = () => {
+    if (window.navigator && window.navigator.app && window.navigator.app.exitApp) {
+      window.navigator.app.exitApp(); // Cordova
+    } else {
+      window.close();
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 relative" style={{ background: 'linear-gradient(135deg, #e0f7fa 0%, #fff9c4 50%, #fce4ec 100%)' }}>
-      <button
-        onClick={() => setShowSettings(true)}
-        className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/60 hover:bg-white/90 transition-colors shadow-sm"
-        style={{ marginTop: 'env(safe-area-inset-top)' }}
-      >
-        <Settings className="w-5 h-5 text-muted-foreground" />
-      </button>
+      <div className="absolute top-4 right-4 z-10 flex items-center gap-2" style={{ marginTop: 'env(safe-area-inset-top)' }}>
+        <button
+          onClick={() => setShowSettings(true)}
+          className="p-2 rounded-full bg-white/60 hover:bg-white/90 transition-colors shadow-sm"
+        >
+          <Settings className="w-5 h-5 text-muted-foreground" />
+        </button>
+        <button
+          onClick={handleExit}
+          className="p-2 rounded-full bg-white/60 hover:bg-white/90 transition-colors shadow-sm"
+          title="Exit app"
+        >
+          <X className="w-5 h-5 text-muted-foreground" />
+        </button>
+      </div>
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
