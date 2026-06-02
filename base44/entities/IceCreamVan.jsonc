@@ -56,7 +56,7 @@
   ],
   "rls": {
     "create": {
-      "data.driver_email": "{{user.email}}"
+      "created_by_id": "{{user.id}}"
     },
     "read": {
       "$or": [
@@ -64,7 +64,10 @@
           "data.is_active": true
         },
         {
-          "created_by": "{{user.email}}"
+          "data.driver_email": "{{user.email}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
         },
         {
           "user_condition": {
@@ -76,7 +79,10 @@
     "update": {
       "$or": [
         {
-          "created_by": "{{user.email}}"
+          "data.driver_email": "{{user.email}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
         },
         {
           "user_condition": {
@@ -88,7 +94,10 @@
     "delete": {
       "$or": [
         {
-          "created_by": "{{user.email}}"
+          "data.driver_email": "{{user.email}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
         },
         {
           "user_condition": {
