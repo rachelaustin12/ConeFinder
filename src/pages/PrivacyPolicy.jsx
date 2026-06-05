@@ -24,8 +24,8 @@ export default function PrivacyPolicy() {
           <h2 className="text-2xl font-bold mt-8 mb-4">Privacy Policy</h2>
 
           <h3 className="text-lg font-semibold mt-6 mb-2">1. Introduction</h3>
-          <p className="text-sm text-foreground leading-relaxed mb-4">
-            Welcome to What's the Scoop? ("we," "us," "our," or "Company"). We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our application.
+          <p className="text-sm text-foreground leading-relaxed mb-4">We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our application.
+
           </p>
 
           <h3 className="text-lg font-semibold mt-6 mb-2">2. Information We Collect</h3>
@@ -85,6 +85,6 @@ export default function PrivacyPolicy() {
           </div>
         </div>
       </main>
-    </div>
-  );
+    </div>);
+
 }
