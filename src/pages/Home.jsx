@@ -96,9 +96,13 @@ export default function Home() {
       <HowItWorksModal open={showHowItWorks} onClose={() => setShowHowItWorks(false)} />
       <SettingsModal open={showSettings} onClose={() => setShowSettings(false)} onShowHowItWorks={() => setShowHowItWorks(true)} />
 
-      <footer className="mt-12 py-6 text-center border-t border-border/20">
+      <footer className="mt-12 py-6 text-center border-t border-border/20 flex items-center justify-center gap-4">
         <Link to="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
           Privacy Policy
+        </Link>
+        <span className="text-border">·</span>
+        <Link to="/data-deletion" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+          Data Deletion
         </Link>
       </footer>
     </div>);

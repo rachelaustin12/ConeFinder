@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import Find from './pages/Find';
 import Driver from './pages/Driver';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import DataDeletion from './pages/DataDeletion';
 import BottomNav from './components/BottomNav';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
@@ -99,6 +100,7 @@ const TabStack = () => {
           >
             <Routes location={location}>
               <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/data-deletion" element={<DataDeletion />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </motion.div>
