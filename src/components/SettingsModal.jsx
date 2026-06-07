@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { X, Info, Trash2, MapPin, ChevronRight } from 'lucide-react';
+import { X, Info, Trash2, MapPin, ChevronRight, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
+import ContactModal from './ContactModal';
 
 export default function SettingsModal({ open, onClose, onShowHowItWorks }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [showContact, setShowContact] = useState(false);
   const reducedMotion = useReducedMotion();
 
   const handleDeleteData = async () => {
@@ -70,6 +72,18 @@ export default function SettingsModal({ open, onClose, onShowHowItWorks }) {
                 <ChevronRight className="w-4 h-4 text-sky-400" />
               </button>
 
+              {/* Contact Us */}
+              <button
+              onClick={() => setShowContact(true)}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-pink-50 hover:bg-pink-100 transition-colors text-left">
+                <Mail className="w-5 h-5 text-pink-500 shrink-0" />
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-pink-700">Contact Us</p>
+                  <p className="text-xs text-pink-500">Report a problem or send feedback</p>
+                </div>
+                <ChevronRight className="w-4 h-4 text-pink-400" />
+              </button>
+
               {/* Driving safety notice */}
               <div className="flex items-start gap-3 px-4 py-3 rounded-2xl bg-red-50 border border-red-100">
                 <span className="text-lg shrink-0">🚫📱</span>
@@ -123,6 +137,7 @@ export default function SettingsModal({ open, onClose, onShowHowItWorks }) {
           </motion.div>
         </motion.div>
       }
+    <ContactModal open={showContact} onClose={() => setShowContact(false)} />
     </AnimatePresence>);
 
 }
