@@ -27,7 +27,7 @@ const TabStack = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const prevPathRef = useRef(location.pathname);
-  const [direction, setDirection] = useState(0); // -1 left, 0 none, 1 right
+  const [direction, setDirection] = useState(0);
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
@@ -45,15 +45,13 @@ const TabStack = () => {
   useEffect(() => {
     const isTab = TAB_PATHS.includes(location.pathname);
     if (isTab && location.pathname !== '/') {
-      // Push a sentinel entry so there's always something to pop back to
       window.history.pushState({ tab: location.pathname }, '');
     }
 
-    const handlePopState = (e) => {
+    const handlePopState = () => {
       const current = window.location.pathname;
       const onTab = TAB_PATHS.includes(current);
       if (onTab && current !== '/') {
-        // Intercept: navigate home instead of going back in browser history
         navigate('/', { replace: true });
       }
     };
@@ -98,7 +96,7 @@ const TabStack = () => {
             transition={reducedMotion ? { duration: 0 } : { duration: 0.22, ease: [0.25, 0.46, 0.45, 0.94] }}
             style={{ position: 'relative', zIndex: 2 }}
           >
-            <Routes location={location}>
+            <Routes>
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/data-deletion" element={<DataDeletion />} />
               <Route path="*" element={<PageNotFound />} />
@@ -113,7 +111,6 @@ const TabStack = () => {
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
 
-  // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
       <div className="fixed inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #e0f7fa 0%, #fff9c4 50%, #fce4ec 100%)' }}>
@@ -126,18 +123,15 @@ const AuthenticatedApp = () => {
     );
   }
 
-  // Handle authentication errors
   if (authError) {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
     } else if (authError.type === 'auth_required') {
-      // Redirect to login automatically
       navigateToLogin();
       return null;
     }
   }
 
-  // Render the main app
   return (
     <>
       <TabStack />
@@ -145,7 +139,6 @@ const AuthenticatedApp = () => {
     </>
   );
 };
-
 
 function App() {
   useEffect(() => {
